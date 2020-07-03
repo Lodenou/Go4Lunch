@@ -6,51 +6,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/lunchbg"
     tools:context=".ConnexionActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="vertical">-->
 
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/trybowlsoup"
-            android:layout_marginTop="50dp"
-            android:scaleY="1.4"
-            android:scaleX="1.6"
-            android:layout_gravity="center" />
-    <TextView
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Go4Lunch"
-        android:textSize="70sp"
-        android:textColor="#ffffff"
-        android:textStyle="bold"
-         />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="12.5sp"
-            android:text="Find a nice restaurant and invite your co-workers for lunch!"
-            android:textColor="#ffffff"
-            android:textStyle="italic">
+<!--        <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/trybowlsoup"-->
+<!--            android:layout_marginTop="50dp"-->
+<!--            android:scaleY="1.4"-->
+<!--            android:scaleX="1.6"-->
+<!--            android:layout_gravity="center" />-->
+<!--    <TextView-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:text="Go4Lunch"-->
+<!--        android:textSize="70sp"-->
+<!--        android:textColor="#ffffff"-->
+<!--        android:textStyle="bold"-->
+<!--         />-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:textSize="12.5sp"-->
+<!--            android:text="Find a nice restaurant and invite your co-workers for lunch!"-->
+<!--            android:textColor="#ffffff"-->
+<!--            android:textStyle="italic">-->
 
-        </TextView>
+<!--        </TextView>-->
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp" />
+<!--&lt;!&ndash;        <com.facebook.login.widget.LoginButton&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/login_button"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_gravity="center_horizontal"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginTop="30dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginBottom="10dp" />&ndash;&gt;-->
 
-    </LinearLayout>
+<!--&lt;!&ndash;        <com.google.android.gms.common.SignInButton&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/sign_in_button"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_gravity="center_horizontal"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginTop="10dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginBottom="10dp">&ndash;&gt;-->
+
+<!--&lt;!&ndash;        </com.google.android.gms.common.SignInButton>&ndash;&gt;-->
+<!--    </LinearLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>
