@@ -1,4 +1,4 @@
-package com.lodenou.go4lunch.ui.slideshow;
+package com.lodenou.go4lunch.ui.settings;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
