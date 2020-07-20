@@ -7,12 +7,16 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/app_bar_main">
 
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/activity_main_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <LinearLayout
+        android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-
-
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
@@ -22,28 +26,7 @@
             app:tabTextColor="#000000"
             android:layout_gravity="bottom">
 
-
-
-            <com.google.android.material.tabs.TabItem
-                android:text="Map View"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content" />
-
-            <com.google.android.material.tabs.TabItem
-                android:text="List View"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content" />
-            <com.google.android.material.tabs.TabItem
-                android:text="Workmates"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content" />
-
         </com.google.android.material.tabs.TabLayout>
-
-        <androidx.viewpager.widget.ViewPager
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
     </LinearLayout>
 
 

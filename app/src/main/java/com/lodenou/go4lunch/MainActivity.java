@@ -19,11 +19,17 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private int[] tabIcons = {
+            R.drawable.ic_baseline_map_24,
+            R.drawable.ic_baseline_view_list_24,
+            R.drawable.ic_baseline_people_24
+    };
 
 
 
@@ -32,6 +38,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getGoogleAccountInformation();
+        createNavMenu();
+        configureViewPagerAndTabs();
+        setTabIcons();
+    }
+
+    private void configureViewPagerAndTabs(){
+        //Get ViewPager from layout
+        ViewPager pager = (ViewPager)findViewById(R.id.activity_main_viewpager);
+        //Set Adapter PageAdapter and glue it together
+        pager.setAdapter(new PageAdapter(getSupportFragmentManager(), getResources().getIntArray(R.array.colorPagesViewPager)));
+
+        // 1 - Get TabLayout from layout
+        TabLayout tabs= (TabLayout)findViewById(R.id.tab_layout);
+        // 2 - Glue TabLayout and ViewPager together
+        tabs.setupWithViewPager(pager);
+        // 3 - Design purpose. Tabs have the same width
+        tabs.setTabMode(TabLayout.MODE_FIXED);
+    }
+    //FIXME ne marche pas
+    private void setTabIcons() {
+
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+
+
+    }
+
+    private void createNavMenu() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -45,16 +81,8 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        getGoogleAccountInformation();
-        setTabLayout();
     }
 
-
-    private void setTabLayout() {
-
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
-
-    }
 
     @Override
     public boolean onSupportNavigateUp() {
