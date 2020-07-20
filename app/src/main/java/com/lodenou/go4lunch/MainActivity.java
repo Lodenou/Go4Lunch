@@ -1,8 +1,13 @@
 package com.lodenou.go4lunch;
 
+import android.content.ClipData;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -46,22 +51,23 @@ public class MainActivity extends AppCompatActivity {
         createNavMenu();
         configureViewPagerAndTabs();
         setTabIcons();
+        setNavMenuOnClicks();
     }
 
     private void configureViewPagerAndTabs(){
-        //Get ViewPager from layout
+
         ViewPager pager = (ViewPager)findViewById(R.id.activity_main_viewpager);
         //Set Adapter PageAdapter and glue it together
         pager.setAdapter(new PageAdapter(getSupportFragmentManager(), getResources().getIntArray(R.array.colorPagesViewPager)));
 
-        // 1 - Get TabLayout from layout
-        TabLayout tabs= (TabLayout)findViewById(R.id.tab_layout);
-        // 2 - Glue TabLayout and ViewPager together
+
+        TabLayout tabs = (TabLayout)findViewById(R.id.tab_layout);
+        // Glue TabLayout and ViewPager together
         tabs.setupWithViewPager(pager);
-        // 3 - Design purpose. Tabs have the same width
+        // Design purpose. Tabs have the same width
         tabs.setTabMode(TabLayout.MODE_FIXED);
     }
-    //FIXME ne marche pas
+
     private void setTabIcons() {
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);
@@ -74,47 +80,54 @@ public class MainActivity extends AppCompatActivity {
 
     private void createNavMenu() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
         toolbar.setTitle("I'm Hungry!");
-
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(MainActivity.this, "Hé ça marche", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.navigation_drawer_open, R.string.navigation_drawer_close){
-
         };
-//        NavigationView navigationView = findViewById(R.id.nav_view);
-////        // Passing each menu ID as a set of Ids because each
-////        // menu should be considered as top level destinations.
-//        mAppBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-//                .setDrawerLayout(drawer)
-//                .build();
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-//        NavigationUI.setupWithNavController(navigationView, navController);
-
-
     }
 
+    private void setNavMenuOnClicks() {
+        NavigationView mNavigationView = findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_home:
+                        Intent intent = new Intent(MainActivity.this, YourLunchActivity.class);
+                        startActivity(intent);
+                        return true;
+                    case R.id.nav_gallery:
+                        Intent intent2 = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivity(intent2);
 
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId() ) {
-            case R.id.nav_home:
-                //TODO
-//                startActivity();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
+                    default:
+                        return false;
+            }}
+        });
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.activity_main_drawer, menu);
+//        return true;
+//    }
+//
+//
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        switch (item.getItemId() ) {
+//            case R.id.nav_home:
+//                Intent intent = new Intent(this, YouLunch.class);
+//                startActivity(intent);
+//                break;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
     private void getGoogleAccountInformation() {
