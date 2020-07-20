@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#ff582a</color>
     <color name="colorPrimaryDark">#c41e00</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorAccent">#ff8b57</color>
 
     <!-- Array of colors that will be used by ViewPager as background colors -->
     <array name="colorPagesViewPager">
