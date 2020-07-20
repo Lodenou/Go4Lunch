@@ -3,6 +3,8 @@ package com.lodenou.go4lunch;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -11,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -84,6 +87,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId() ) {
+            case R.id.nav_home:
+                //TODO
+//                startActivity();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -102,12 +118,15 @@ public class MainActivity extends AppCompatActivity {
             String personId = acct.getId();
             Uri personPhoto = acct.getPhotoUrl();
 
-//            if(personName != null){
-//
-//                TextView username = findViewById(R.id.textview_user_name);
-//                username.setText(personName);
-            }
-        }
+            if(personName != null){
+
+                View headerView = ((NavigationView) findViewById(R.id.nav_view))
+                        .getHeaderView(0);
+                TextView username = headerView
+                        .findViewById(R.id.textview_user_name);
+                username.setText(personName);
+
+        }}}
 
 
     private void setNavigationMenuInformation() {
