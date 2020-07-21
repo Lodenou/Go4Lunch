@@ -1,5 +1,6 @@
 package com.lodenou.go4lunch;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,6 +11,16 @@ import android.view.Window;
 import android.widget.Toast;
 
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -18,6 +29,11 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.shobhitpuri.custombuttons.GoogleSignInButton;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 
 public class ConnexionActivity extends AppCompatActivity {
@@ -25,6 +41,7 @@ public class ConnexionActivity extends AppCompatActivity {
     // 1 - Identifier for Sign-In Activity
     private static final int RC_SIGN_IN = 123;
     private final String TAG = "cycle";
+    private CallbackManager mCallbackManager;
 
 
     @Override
@@ -34,12 +51,25 @@ public class ConnexionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_connexion);
         GoogleSignInButton mSignInButton = findViewById(R.id.btn_sign_in);
         googleBtnOnClick();
+        signInFacebook();
     }
 
     @Override
     protected void onStart() {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        LoginManager.getInstance().logOut();
+        GoogleSignInOptions gso = new GoogleSignInOptions.
+                Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
+                build();
+
+        GoogleSignInClient googleSignInClient=GoogleSignIn.getClient(ConnexionActivity.this,gso);
+        googleSignInClient.signOut();
+        super.onDestroy();
     }
 
     private void googleBtnOnClick() {
@@ -49,14 +79,14 @@ public class ConnexionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.btn_sign_in:
-                        signIn();
+                        signInGoogle();
                         break;
                 }
             }
         });
     }
 
-    private void signIn() {
+    private void signInGoogle() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -64,6 +94,44 @@ public class ConnexionActivity extends AppCompatActivity {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
+    private void signInFacebook() {
+        // Initialize Facebook Login button
+        mCallbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                GoogleSignInOptions gso = new GoogleSignInOptions.
+                        Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
+                        build();
+
+                GoogleSignInClient googleSignInClient=GoogleSignIn.getClient(ConnexionActivity.this,gso);
+                googleSignInClient.signOut();
+                finish();
+                startActivity(new Intent(ConnexionActivity.this, MainActivity.class));
+
+
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "facebook:onCancel");
+                // ...
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, "facebook:onError", error);
+                // ...
+            }
+        });
+
+    }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -76,6 +144,7 @@ public class ConnexionActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
@@ -83,20 +152,22 @@ public class ConnexionActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            updateUI(account);
+            updateGoogleUI(account);
 //            Intent intent = new Intent(ConnexionActivity.this, MainActivity.class);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            updateUI(null);
+            updateGoogleUI(null);
         }
     }
 
-    public void updateUI(GoogleSignInAccount account) {
+    public void updateGoogleUI(GoogleSignInAccount account) {
         if (account != null) {
             Toast.makeText(this, "You successfully signed-in ", Toast.LENGTH_LONG).show();
+            LoginManager.getInstance().logOut();
             startActivity(new Intent(this, MainActivity.class));
+            finish();
         } else {
             Toast.makeText(this, "Failed to sign-in", Toast.LENGTH_LONG).show();
         }

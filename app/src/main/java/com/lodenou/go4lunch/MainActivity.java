@@ -15,9 +15,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -44,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_baseline_view_list_24,
             R.drawable.ic_baseline_people_24
     };
+    GoogleSignInClient mGoogleApiClient;
 
 
 
@@ -56,6 +64,18 @@ public class MainActivity extends AppCompatActivity {
         configureViewPagerAndTabs();
         setTabIcons();
         setNavMenuOnClicks();
+    }
+
+    @Override
+    protected void onDestroy() {
+        LoginManager.getInstance().logOut();
+        GoogleSignInOptions gso = new GoogleSignInOptions.
+                Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
+                build();
+
+        GoogleSignInClient googleSignInClient=GoogleSignIn.getClient(MainActivity.this,gso);
+        googleSignInClient.signOut();
+        super.onDestroy();
     }
 
     private void configureViewPagerAndTabs(){
@@ -106,6 +126,18 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent2);
                         return true;
                     case R.id.nav_logout:
+                        // facebook logged out
+                        LoginManager.getInstance().logOut();
+                        // google logged out
+                        GoogleSignInOptions gso = new GoogleSignInOptions.
+                                Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
+                                build();
+
+                        GoogleSignInClient googleSignInClient=GoogleSignIn.getClient(MainActivity.this,gso);
+                        googleSignInClient.signOut();
+                        Intent intent3 = new Intent(MainActivity.this, ConnexionActivity.class);
+                        finish();
+                        startActivity(intent3);
                     //TODO
                         return true;
                     default:

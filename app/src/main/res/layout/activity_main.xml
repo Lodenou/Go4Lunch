@@ -29,7 +29,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/bowlofsouplogo2"
+            android:src="@drawable/bol_logo"
             android:layout_marginTop="580dp"
             >
 
