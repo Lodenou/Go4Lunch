@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.Toast;
 
 
@@ -99,6 +100,8 @@ public class ConnexionActivity extends AppCompatActivity {
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = findViewById(R.id.login_button);
+
+
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -112,16 +115,13 @@ public class ConnexionActivity extends AppCompatActivity {
                 googleSignInClient.signOut();
                 finish();
                 startActivity(new Intent(ConnexionActivity.this, MainActivity.class));
-
-
+                Toast.makeText(ConnexionActivity.this, "You successfully signed-in ", Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
                 // ...
             }
-
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
@@ -129,6 +129,19 @@ public class ConnexionActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void onClick(View v) {
+        Button google = findViewById(R.id.google_button);
+        Button fb = (Button) findViewById(R.id.fb);
+        GoogleSignInButton googleSignInButton = findViewById(R.id.btn_sign_in);
+        LoginButton loginButton = findViewById(R.id.login_button);
+        if (v == fb) {
+            loginButton.performClick();
+        }
+        if (v == google) {
+            googleSignInButton.performClick();
+        }
     }
 
 
