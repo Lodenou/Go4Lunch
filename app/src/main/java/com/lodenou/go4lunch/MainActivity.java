@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,7 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -41,6 +46,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.URI;
 
 
@@ -53,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_baseline_people_24
     };
     GoogleSignInClient mGoogleApiClient;
+    private final String TAG = "Facebook";
 
 
 
@@ -65,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         configureViewPagerAndTabs();
         setTabIcons();
         setNavMenuOnClicks();
+        getFbInfo();
     }
 
     @Override
@@ -105,6 +115,56 @@ public class MainActivity extends AppCompatActivity {
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.navigation_drawer_open, R.string.navigation_drawer_close){
         };
     }
+
+    private void getFbInfo() {
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject json, GraphResponse response) {
+                // Application code
+                if (response.getError() != null) {
+                    System.out.println("ERROR");
+                } else {
+                    System.out.println("Success");
+                    String jsonresult = String.valueOf(json);
+                    System.out.println("JSON Result" + jsonresult);
+
+                    String fbUserId = json.optString("id");
+                    String fbUserFirstName = json.optString("name");
+                    String fbUserEmail = json.optString("email");
+                    String fbUserProfilePics = "https://graph.facebook.com/" + fbUserId + "/picture?type=large";
+                    Log.d("SignUpActivity", "Email: " + fbUserEmail + "\nName: " + fbUserFirstName + "\nID: " + fbUserId);
+
+                    // USE THIS INFOS INTO NAVIGATION MENU 
+                    View headerView = ((NavigationView) findViewById(R.id.nav_view))
+                            .getHeaderView(0);
+
+                    TextView username = headerView
+                            .findViewById(R.id.textview_user_name);
+                    TextView emailadress = headerView
+                            .findViewById(R.id.textView);
+                    ImageView personalphoto = headerView
+                            .findViewById(R.id.imageView);
+
+                    username.setText(fbUserFirstName);
+                    emailadress.setText(fbUserEmail);
+                    if(personalphoto != null){
+                    Glide.with(headerView)
+                            .load(fbUserProfilePics)
+                            .circleCrop()
+                            .into(personalphoto);
+                    }
+
+                }
+
+                Log.d("SignUpActivity", response.toString());
+            }
+        });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email,gender, birthday");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+
 
     private void logOut(){
         // FIREBASE LOGOUT
