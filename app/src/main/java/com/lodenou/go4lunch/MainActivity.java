@@ -27,6 +27,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -68,13 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        LoginManager.getInstance().logOut();
-        GoogleSignInOptions gso = new GoogleSignInOptions.
-                Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
-                build();
-
-        GoogleSignInClient googleSignInClient=GoogleSignIn.getClient(MainActivity.this,gso);
-        googleSignInClient.signOut();
+        logOut();
         super.onDestroy();
     }
 
@@ -111,6 +106,20 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+    private void logOut(){
+        // FIREBASE LOGOUT
+        FirebaseAuth.getInstance().signOut();
+        // FACEBOOK LOGOUT
+        LoginManager.getInstance().logOut();
+        // GOOGLE LOGOUT
+        GoogleSignInOptions gso = new GoogleSignInOptions.
+                Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
+                build();
+
+        GoogleSignInClient googleSignInClient=GoogleSignIn.getClient(MainActivity.this,gso);
+        googleSignInClient.signOut();
+    }
+
     private void setNavMenuOnClicks() {
         NavigationView mNavigationView = findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -126,15 +135,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent2);
                         return true;
                     case R.id.nav_logout:
-                        // facebook logged out
-                        LoginManager.getInstance().logOut();
-                        // google logged out
-                        GoogleSignInOptions gso = new GoogleSignInOptions.
-                                Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
-                                build();
-
-                        GoogleSignInClient googleSignInClient=GoogleSignIn.getClient(MainActivity.this,gso);
-                        googleSignInClient.signOut();
+                        logOut();
                         Intent intent3 = new Intent(MainActivity.this, ConnexionActivity.class);
                         finish();
                         startActivity(intent3);
