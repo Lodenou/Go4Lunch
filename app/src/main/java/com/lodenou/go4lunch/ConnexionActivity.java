@@ -1,24 +1,17 @@
 package com.lodenou.go4lunch;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
-
-
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -28,13 +21,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.shobhitpuri.custombuttons.GoogleSignInButton;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
-import java.util.Arrays;
 
 
 public class ConnexionActivity extends AppCompatActivity {
@@ -43,6 +32,9 @@ public class ConnexionActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private final String TAG = "cycle";
     private CallbackManager mCallbackManager;
+    private FirebaseAuth mAuth;
+
+
 
 
     @Override
@@ -53,11 +45,15 @@ public class ConnexionActivity extends AppCompatActivity {
         GoogleSignInButton mSignInButton = findViewById(R.id.btn_sign_in);
         googleBtnOnClick();
         signInFacebook();
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
     }
 
     @Override
     protected void onStart() {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        // Check if user is signed in (non-null) and update UI accordingly.
         super.onStart();
     }
 
