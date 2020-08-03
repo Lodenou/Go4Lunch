@@ -54,18 +54,11 @@ public class ConnexionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connexion);
-        // GOOGLE
+        // INITIATE FIREBASE AUTH
+        mAuth = FirebaseAuth.getInstance();
 
         signInGoogle();
-        // FACEBOOK
         signInFacebook();
-    }
-
-    @Override
-    protected void onStart() {
-//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        // Check if user is signed in (non-null) and update UI accordingly.
-        super.onStart();
     }
 
     @Override
@@ -200,8 +193,6 @@ public class ConnexionActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
 
                         }
-
-                        // ...
                     }
                 });
     }

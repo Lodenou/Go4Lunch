@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 //        setSupportActionBar(toolbar);
         toolbar.setTitle("I'm Hungry!");
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        new ActionBarDrawerToggle(this, drawer,toolbar,R.string.navigation_drawer_open, R.string.navigation_drawer_close){
         };
     }
 
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     String fbUserProfilePics = "https://graph.facebook.com/" + fbUserId + "/picture?type=large";
                     Log.d("SignUpActivity", "Email: " + fbUserEmail + "\nName: " + fbUserFirstName + "\nID: " + fbUserId);
 
-                    // USE THIS INFOS INTO NAVIGATION MENU 
+                    // USE THIS INFOS INTO NAVIGATION MENU
                     View headerView = ((NavigationView) findViewById(R.id.nav_view))
                             .getHeaderView(0);
 
