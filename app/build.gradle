@@ -10,6 +10,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        resValue "string", "google_map_id", 'AIzaSyAXK8F7L2IEj7xBk0awqDgZ8RdjHwjFJq0'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
