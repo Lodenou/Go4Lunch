@@ -1,17 +1,13 @@
 package com.lodenou.go4lunch;
 
 
-import android.graphics.drawable.Drawable;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
-
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.lodenou.go4lunch.fragments.ListView.ListViewFragment;
 import com.lodenou.go4lunch.fragments.MapsFragment;
+import com.lodenou.go4lunch.fragments.workmates.WorkMatesFragment;
 
 public class PageAdapter extends FragmentPagerAdapter {
 
@@ -51,8 +47,11 @@ public class PageAdapter extends FragmentPagerAdapter {
             return MapsFragment.newInstance();
         }
 
-        else {
-            return PageFragment.newInstance();
+        else if(position == 1) {
+            return ListViewFragment.newInstance();
+        }
+        else   {
+            return WorkMatesFragment.newInstance();
         }
     }
 
