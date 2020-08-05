@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.lodenou.go4lunch.fragments.ListView.ListViewFragment;
+import com.lodenou.go4lunch.fragments.listview.ListViewFragment;
 import com.lodenou.go4lunch.fragments.MapsFragment;
 import com.lodenou.go4lunch.fragments.workmates.WorkMatesFragment;
 
