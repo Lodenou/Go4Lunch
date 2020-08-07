@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lodenou.go4lunch.PageFragment;
 import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.fragments.workmates.dummy.DummyContent;
 

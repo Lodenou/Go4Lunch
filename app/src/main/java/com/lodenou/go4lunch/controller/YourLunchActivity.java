@@ -1,8 +1,10 @@
-package com.lodenou.go4lunch;
+package com.lodenou.go4lunch.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.lodenou.go4lunch.R;
 
 public class YourLunchActivity extends AppCompatActivity {
 

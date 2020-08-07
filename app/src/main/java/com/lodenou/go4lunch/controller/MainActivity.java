@@ -1,55 +1,36 @@
-package com.lodenou.go4lunch;
+package com.lodenou.go4lunch.controller;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.lodenou.go4lunch.R;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URI;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -87,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPager pager = (ViewPager)findViewById(R.id.activity_main_viewpager);
         //Set Adapter PageAdapter and glue it together
-        pager.setAdapter(new PageAdapter(getSupportFragmentManager(), getResources().getIntArray(R.array.colorPagesViewPager)));
+        pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
 
 
         TabLayout tabs = (TabLayout)findViewById(R.id.tab_layout);
@@ -98,13 +79,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setTabIcons() {
-
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
-
-
     }
 
     private void createNavMenu() {

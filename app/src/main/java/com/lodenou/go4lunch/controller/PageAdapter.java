@@ -1,10 +1,11 @@
-package com.lodenou.go4lunch;
+package com.lodenou.go4lunch.controller;
 
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.fragments.listview.ListViewFragment;
 import com.lodenou.go4lunch.fragments.MapsFragment;
 import com.lodenou.go4lunch.fragments.workmates.WorkMatesFragment;
@@ -15,9 +16,8 @@ public class PageAdapter extends FragmentPagerAdapter {
     private int[] colors;
 
     // 2 - Default Constructor
-    public PageAdapter(FragmentManager mgr, int[] colors) {
+    public PageAdapter(FragmentManager mgr) {
         super(mgr);
-        this.colors = colors;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class PageAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        int fragment_page = R.layout.fragment_page;
+
 //        switch (position) {
 //            case 0:
 //                fragment_page = R.layout.fragment_page;

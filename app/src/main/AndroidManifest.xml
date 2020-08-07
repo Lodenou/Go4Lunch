@@ -50,14 +50,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".controller.SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
-        <activity android:name=".YourLunchActivity" />
+        <activity android:name=".controller.YourLunchActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".controller.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ConnexionActivity">
+        <activity android:name=".controller.ConnexionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
