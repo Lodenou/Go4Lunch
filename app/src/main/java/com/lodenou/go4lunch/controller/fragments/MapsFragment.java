@@ -1,4 +1,4 @@
-package com.lodenou.go4lunch.fragments;
+package com.lodenou.go4lunch.controller.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

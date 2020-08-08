@@ -1,4 +1,4 @@
-package com.lodenou.go4lunch.controller;
+package com.lodenou.go4lunch.controller.activitiy;
 
 import android.os.Bundle;
 

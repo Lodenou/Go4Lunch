@@ -1,4 +1,4 @@
-package com.lodenou.go4lunch.fragments.workmates.dummy;
+package com.lodenou.go4lunch.controller.fragments.workmates.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

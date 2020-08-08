@@ -7,7 +7,7 @@
     android:background="@drawable/lunchbg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.ConnexionActivity">
+    tools:context=".controller.activitiy.ConnexionActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.lodenou.go4lunch.fragments.workmates;
+package com.lodenou.go4lunch.controller.fragments.listview;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,12 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lodenou.go4lunch.R;
-import com.lodenou.go4lunch.fragments.workmates.dummy.DummyContent;
+import com.lodenou.go4lunch.controller.fragments.listview.dummy.DummyContent;
 
 /**
  * A fragment representing a list of Items.
  */
-public class WorkMatesFragment extends Fragment {
+public class ListViewFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -29,22 +29,22 @@ public class WorkMatesFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public WorkMatesFragment() {
+    public ListViewFragment() {
     }
 
-//    // TODO: Customize parameter initialization
+    // TODO: Customize parameter initialization
 //    @SuppressWarnings("unused")
-//    public static WorkMatesFragment newInstance(int columnCount) {
-//        WorkMatesFragment fragment = new WorkMatesFragment();
+//    public static ListViewFragment newInstance(int columnCount) {
+//        ListViewFragment fragment = new ListViewFragment();
 //        Bundle args = new Bundle();
 //        args.putInt(ARG_COLUMN_COUNT, columnCount);
 //        fragment.setArguments(args);
 //        return fragment;
 //    }
-public static WorkMatesFragment newInstance() {
-    WorkMatesFragment workMatesFragment = new WorkMatesFragment();
-    return workMatesFragment;
-}
+    public static ListViewFragment newInstance() {
+        ListViewFragment listViewFragment = new ListViewFragment();
+        return listViewFragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public static WorkMatesFragment newInstance() {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_work_mates_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_view_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {

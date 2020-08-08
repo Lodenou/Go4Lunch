@@ -9,7 +9,7 @@
     You can also add your credentials to an existing key, using these values:
 
     Package name:
-    com.lodenou.go4lunch.fragments
+    com.lodenou.go4lunch.controller.fragments
 
     SHA-1 certificate fingerprint:
     FE:97:B7:FC:8A:F3:14:28:0E:2E:A8:C7:B1:18:0A:1D:05:8E:71:DE

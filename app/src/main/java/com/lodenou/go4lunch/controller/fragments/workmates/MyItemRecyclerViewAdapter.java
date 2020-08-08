@@ -1,4 +1,4 @@
-package com.lodenou.go4lunch.fragments.workmates;
+package com.lodenou.go4lunch.controller.fragments.workmates;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lodenou.go4lunch.R;
-import com.lodenou.go4lunch.fragments.workmates.dummy.DummyContent.DummyItem;
+import com.lodenou.go4lunch.controller.fragments.workmates.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 

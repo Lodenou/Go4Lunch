@@ -1,4 +1,4 @@
-package com.lodenou.go4lunch.controller;
+package com.lodenou.go4lunch.controller.activitiy;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -21,6 +22,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.lodenou.go4lunch.R;
+import com.lodenou.go4lunch.controller.PageAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -29,8 +31,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
-import org.json.JSONObject;
 
+import org.json.JSONObject;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     };
     GoogleSignInClient mGoogleApiClient;
     private final String TAG = "Facebook";
-
 
 
     @Override
@@ -64,14 +65,14 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void configureViewPagerAndTabs(){
+    private void configureViewPagerAndTabs() {
 
-        ViewPager pager = (ViewPager)findViewById(R.id.activity_main_viewpager);
+        ViewPager pager = (ViewPager) findViewById(R.id.activity_main_viewpager);
         //Set Adapter PageAdapter and glue it together
         pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
 
 
-        TabLayout tabs = (TabLayout)findViewById(R.id.tab_layout);
+        TabLayout tabs = (TabLayout) findViewById(R.id.tab_layout);
         // Glue TabLayout and ViewPager together
         tabs.setupWithViewPager(pager);
         // Design purpose. Tabs have the same width
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 //        setSupportActionBar(toolbar);
         toolbar.setTitle("I'm Hungry!");
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        new ActionBarDrawerToggle(this, drawer,toolbar,R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
         };
     }
 
@@ -125,11 +126,11 @@ public class MainActivity extends AppCompatActivity {
 
                     username.setText(fbUserFirstName);
                     emailadress.setText(fbUserEmail);
-                    if(personalphoto != null){
-                    Glide.with(headerView)
-                            .load(fbUserProfilePics)
-                            .circleCrop()
-                            .into(personalphoto);
+                    if (personalphoto != null) {
+                        Glide.with(headerView)
+                                .load(fbUserProfilePics)
+                                .circleCrop()
+                                .into(personalphoto);
                     }
 
                 }
@@ -144,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void logOut(){
+    private void logOut() {
         // FIREBASE LOGOUT
         FirebaseAuth.getInstance().signOut();
         // FACEBOOK LOGOUT
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                 Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
                 build();
 
-        GoogleSignInClient googleSignInClient=GoogleSignIn.getClient(MainActivity.this,gso);
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
         googleSignInClient.signOut();
     }
 
@@ -163,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.nav_yourlunch:
                         Intent intent = new Intent(MainActivity.this, YourLunchActivity.class);
                         startActivity(intent);
@@ -177,13 +178,15 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent3 = new Intent(MainActivity.this, ConnexionActivity.class);
                         finish();
                         startActivity(intent3);
-                    //TODO
+                        //TODO
                         return true;
                     default:
                         return false;
-            }}
+                }
+            }
         });
     }
+
     private void getGoogleAccountInformation() {
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
         if (acct != null) {
@@ -194,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
             String personId = acct.getId();
             Uri personPhoto = acct.getPhotoUrl();
 
-            if(personName != null){
+            if (personName != null) {
 
                 View headerView = ((NavigationView) findViewById(R.id.nav_view))
                         .getHeaderView(0);
@@ -214,6 +217,8 @@ public class MainActivity extends AppCompatActivity {
                 username.setText(personName);
                 emailadress.setText(personEmail);
 
-        }}}
+            }
+        }
+    }
 
 }

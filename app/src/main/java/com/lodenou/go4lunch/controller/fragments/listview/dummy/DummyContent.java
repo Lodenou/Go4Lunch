@@ -1,4 +1,4 @@
-package com.lodenou.go4lunch.fragments.listview.dummy;
+package com.lodenou.go4lunch.controller.fragments.listview.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
