@@ -20,9 +20,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.PageAdapter;
@@ -36,8 +33,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -62,12 +57,6 @@ public class MainActivity extends AppCompatActivity {
         setTabIcons();
         setNavMenuOnClicks();
         getFbInfo();
-        // tRY FOR ADMIN SDK FIREBASE
-        try {
-            initializeFirebaseSdk();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -231,14 +220,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    private void initializeFirebaseSdk() throws IOException {
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.getApplicationDefault())
-                .setDatabaseUrl("https://<DATABASE_NAME>.firebaseio.com/")
-                .build();
-
-        FirebaseApp.initializeApp(options);
-    }
-
 }

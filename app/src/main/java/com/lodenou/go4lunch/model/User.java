@@ -4,26 +4,28 @@ import java.util.List;
 
 public class User {
 
-    private String id;
+    private String uid;
     private String name;
     private String avatarUrl;
-    private Boolean eatSomewhere; // use to sort workmates
-    private List<String> favoriteRestaurants;
+    private String restaurantId;
+    private String restaurantName;
+    private List<String> favoritesRestaurants;
 
-    public User(String id, String name, String avatarUrl, String restaurantId, String restaurantName, Boolean eatSomewhere, List<String> favoriteRestaurants) {
-        this.id = id;
+    public User(String uid, String name, String avatarUrl, String restaurantId, String restaurantName, List<String> favoritesRestaurants) {
+        this.uid = uid;
         this.name = name;
         this.avatarUrl = avatarUrl;
-        this.eatSomewhere = eatSomewhere;
-        this.favoriteRestaurants = favoriteRestaurants;
+        this.restaurantId = restaurantId;
+        this.restaurantName = restaurantName;
+        this.favoritesRestaurants = favoritesRestaurants;
     }
 
-    public String getId() {
-        return id;
+    public String getUid() {
+        return uid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -42,19 +44,28 @@ public class User {
         this.avatarUrl = avatarUrl;
     }
 
-    public Boolean getEatSomewhere() {
-        return eatSomewhere;
+    public String getRestaurantId() {
+        return restaurantId;
     }
 
-    public void setEatSomewhere(Boolean eatSomewhere) {
-        this.eatSomewhere = eatSomewhere;
+    public void setRestaurantId(String restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
-    public List<String> getFavoriteRestaurants() {
-        return favoriteRestaurants;
+    public String getRestaurantName() {
+        return restaurantName;
     }
 
-    public void setFavoriteRestaurants(List<String> favoriteRestaurants) {
-        this.favoriteRestaurants = favoriteRestaurants;
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
+    public List<String> getFavoritesRestaurants() {
+        return favoritesRestaurants;
+    }
+
+    public void setFavoritesRestaurants(List<String> favoritesRestaurants) {
+        this.favoritesRestaurants = favoritesRestaurants;
     }
 }
+
