@@ -7,16 +7,13 @@ public class User {
     private String uid;
     private String name;
     private String avatarUrl;
-    private String restaurantId;
-    private String restaurantName;
     private List<String> favoritesRestaurants;
 
-    public User(String uid, String name, String avatarUrl, String restaurantId, String restaurantName, List<String> favoritesRestaurants) {
+    public User(String uid, String name, String avatarUrl, List<String> favoritesRestaurants) {
         this.uid = uid;
         this.name = name;
         this.avatarUrl = avatarUrl;
-        this.restaurantId = restaurantId;
-        this.restaurantName = restaurantName;
+
         this.favoritesRestaurants = favoritesRestaurants;
     }
 
@@ -42,22 +39,6 @@ public class User {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
-    }
-
-    public String getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(String restaurantId) {
-        this.restaurantId = restaurantId;
-    }
-
-    public String getRestaurantName() {
-        return restaurantName;
-    }
-
-    public void setRestaurantName(String restaurantName) {
-        this.restaurantName = restaurantName;
     }
 
     public List<String> getFavoritesRestaurants() {

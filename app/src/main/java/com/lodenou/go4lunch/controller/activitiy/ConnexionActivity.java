@@ -60,15 +60,25 @@ public class ConnexionActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        // Check if user is signed in (non-null) and update UI accordingly.
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        super.onStart();
+    }
+
+    @Override
     protected void onDestroy() {
-        //sign-out onDestroy
-        LoginManager.getInstance().logOut();
+        // FIREBASE LOGOUT
+        FirebaseAuth.getInstance().signOut();
+        // GOOGLE LOGOUT
         gso = new GoogleSignInOptions.
                 Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
                 build();
 
         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(ConnexionActivity.this, gso);
         googleSignInClient.signOut();
+        // FACBOOK LOGOUT
+        LoginManager.getInstance().logOut();
         super.onDestroy();
     }
 
@@ -117,7 +127,7 @@ public class ConnexionActivity extends AppCompatActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                    e.printStackTrace();
                     }
                 });
 

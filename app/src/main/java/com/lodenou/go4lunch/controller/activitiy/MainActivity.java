@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
@@ -18,13 +19,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.PageAdapter;
+import com.lodenou.go4lunch.controller.api.UserHelper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -33,6 +38,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import org.json.JSONObject;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_baseline_people_24
     };
     GoogleSignInClient mGoogleApiClient;
-    private final String TAG = "Facebook";
+    private final String TAG = "cycle";
+
 
 
     @Override
@@ -57,12 +65,20 @@ public class MainActivity extends AppCompatActivity {
         setTabIcons();
         setNavMenuOnClicks();
         getFbInfo();
+        createUserInFirestore();
     }
 
     @Override
     protected void onDestroy() {
-        logOut();
+        logOut4();
         super.onDestroy();
+        Log.d(TAG, "onDestroy");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop");
     }
 
     private void configureViewPagerAndTabs() {
@@ -145,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void logOut() {
+    public void logOut4() {
         // FIREBASE LOGOUT
         FirebaseAuth.getInstance().signOut();
         // FACEBOOK LOGOUT
@@ -157,6 +173,9 @@ public class MainActivity extends AppCompatActivity {
 
         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
         googleSignInClient.signOut();
+        Intent intent3 = new Intent(MainActivity.this, ConnexionActivity.class);
+        finish();
+        startActivity(intent3);
     }
 
     private void setNavMenuOnClicks() {
@@ -174,11 +193,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent2);
                         return true;
                     case R.id.nav_logout:
-                        logOut();
-                        Intent intent3 = new Intent(MainActivity.this, ConnexionActivity.class);
-                        finish();
-                        startActivity(intent3);
-                        //TODO
+                        logOut4();
                         return true;
                     default:
                         return false;
@@ -208,7 +223,6 @@ public class MainActivity extends AppCompatActivity {
                         .findViewById(R.id.textView);
                 ImageView personalphoto = headerView.findViewById(R.id.imageView);
 
-                //FIXME à vérifier si cela marche vraiment avec toutes les images de profil
                 Glide.with(this)
                         .load(personPhoto)
                         .sizeMultiplier(0.1f)
@@ -220,4 +234,37 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Nullable
+    protected FirebaseUser getCurrentUser(){
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+    protected Boolean isCurrentUserLogged(){
+        return (this.getCurrentUser() != null);
+    }
+
+    protected OnFailureListener onFailureListener(){
+        return new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Firestore Error", Toast.LENGTH_LONG).show();
+            }
+        };
+    }
+
+
+
+    // 1 - Http request that create user in firestore
+    private void createUserInFirestore(){
+        if (this.getCurrentUser() != null){
+
+            String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
+            String username = this.getCurrentUser().getDisplayName();
+            String uid = this.getCurrentUser().getUid();
+
+            UserHelper.createUser(uid, username, urlPicture, null).addOnFailureListener(this.onFailureListener());
+        }
+    }
+
 }

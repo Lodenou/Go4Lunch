@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.lodenou.go4lunch.model.User;
 
 import java.util.List;
-
+// THIS CLASS STATICALLY REFERS CRUD REQUESTS
 public class UserHelper {
 
         private static final String COLLECTION_NAME = "users";
@@ -21,8 +21,8 @@ public class UserHelper {
 
         // --- CREATE ---
 
-        public static Task<Void> createUser(String uid, String username, String urlPicture, String restaurantId, String restaurantName, List<String> favoritesRestaurants ) {
-            User userToCreate = new User(uid, username, urlPicture, restaurantId, restaurantName, favoritesRestaurants );
+        public static Task<Void> createUser(String uid, String username, String urlPicture, List<String> favoritesRestaurants ) {
+            User userToCreate = new User(uid, username, urlPicture,favoritesRestaurants );
             return UserHelper.getUsersCollection().document(uid).set(userToCreate);
         }
 
@@ -37,11 +37,6 @@ public class UserHelper {
         public static Task<Void> updateUsername(String username, String uid) {
             return UserHelper.getUsersCollection().document(uid).update("username", username);
         }
-
-        public static Task<Void> updateIsMentor(String uid, Boolean isMentor) {
-            return UserHelper.getUsersCollection().document(uid).update("isMentor", isMentor);
-        }
-
         // --- DELETE ---
 
         public static Task<Void> deleteUser(String uid) {

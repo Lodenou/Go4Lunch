@@ -8,7 +8,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:311367097628:android:46e36dbb4b6815806beed9",
+        "mobilesdk_app_id": "1:311367097628:android:303ad483adaa38a46beed9",
         "android_client_info": {
           "package_name": "com.lodenou.go4lunch"
         }
@@ -29,7 +29,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAXK8F7L2IEj7xBk0awqDgZ8RdjHwjFJq0"
+          "current_key": "AIzaSyB1xhOxAWt3MmUbrxZVNen0wXl-gqQ5Nk4"
         }
       ],
       "services": {
