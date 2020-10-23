@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lodenou.go4lunch.R;
-import com.lodenou.go4lunch.controller.fragments.listview.dummy.DummyContent;
+import com.lodenou.go4lunch.controller.fragments.listview.dummy.DummyContentListview;
 
 /**
  * A fragment representing a list of Items.
@@ -32,15 +32,7 @@ public class ListViewFragment extends Fragment {
     public ListViewFragment() {
     }
 
-    // TODO: Customize parameter initialization
-//    @SuppressWarnings("unused")
-//    public static ListViewFragment newInstance(int columnCount) {
-//        ListViewFragment fragment = new ListViewFragment();
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_COLUMN_COUNT, columnCount);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
+
     public static ListViewFragment newInstance() {
         ListViewFragment listViewFragment = new ListViewFragment();
         return listViewFragment;
@@ -69,7 +61,7 @@ public class ListViewFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContentListview.ITEMS));
         }
         return view;
     }

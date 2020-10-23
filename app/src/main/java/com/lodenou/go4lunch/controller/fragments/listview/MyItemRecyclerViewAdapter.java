@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lodenou.go4lunch.R;
-import com.lodenou.go4lunch.controller.fragments.listview.dummy.DummyContent.DummyItem;
+import com.lodenou.go4lunch.controller.fragments.listview.dummy.DummyContentListview.DummyItem;
 
 import java.util.List;
 

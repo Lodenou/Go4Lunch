@@ -1,64 +1,57 @@
 package com.lodenou.go4lunch.controller.fragments.workmates;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lodenou.go4lunch.R;
-import com.lodenou.go4lunch.controller.fragments.workmates.dummy.DummyContent.DummyItem;
+import com.lodenou.go4lunch.model.User;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
- * TODO: Replace the implementation with code for your data type.
- */
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
+public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<WorkmatesViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private List<User> mUsers;
 
-    public MyItemRecyclerViewAdapter(List<DummyItem> items) {
-        mValues = items;
+    public MyItemRecyclerViewAdapter(List<User> users) {
+        this.mUsers = users;
+    }
+
+
+    @NonNull
+    @Override
+    public WorkmatesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        // Inflate the custom layout
+        View view = inflater.inflate(R.layout.fragment_list_view, parent, false);
+
+        // Return a new holder instance
+        WorkmatesViewHolder viewHolder = new WorkmatesViewHolder(view);
+        return viewHolder;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_work_mates, parent, false);
-        return new ViewHolder(view);
-    }
+    public void onBindViewHolder(@NonNull WorkmatesViewHolder holder, int position) {
+        // Get the data model based on position
+        User user = mUsers.get(position);
 
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        // Set item views based on your views and data model
+        TextView textView = holder.mContentView;
+        textView.setText(user.getName());
+        TextView textView1 = holder.mIdView;
+        textView1.setText(String.valueOf(position));
+
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
-
-        public ViewHolder(View view) {
-            super(view);
-            mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
-        }
+        return mUsers.size();
     }
 }

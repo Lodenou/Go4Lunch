@@ -9,6 +9,10 @@ public class User {
     private String avatarUrl;
     private List<String> favoritesRestaurants;
 
+    public User(){
+
+    }
+
     public User(String uid, String name, String avatarUrl, List<String> favoritesRestaurants) {
         this.uid = uid;
         this.name = name;

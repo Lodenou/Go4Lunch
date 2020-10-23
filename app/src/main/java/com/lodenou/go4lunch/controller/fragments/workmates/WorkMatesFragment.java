@@ -1,46 +1,37 @@
 package com.lodenou.go4lunch.controller.fragments.workmates;
 
-import android.content.Context;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.model.Document;
 import com.lodenou.go4lunch.R;
-import com.lodenou.go4lunch.controller.fragments.workmates.dummy.DummyContent;
+import com.lodenou.go4lunch.controller.api.UserHelper;
+import com.lodenou.go4lunch.model.User;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
  */
 public class WorkMatesFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+    MyItemRecyclerViewAdapter mAdapter;
+    private List<User> mUsers;
+    User mUser;
+    RecyclerView mRecyclerView;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public WorkMatesFragment() {
     }
 
-//    // TODO: Customize parameter initialization
-//    @SuppressWarnings("unused")
-//    public static WorkMatesFragment newInstance(int columnCount) {
-//        WorkMatesFragment fragment = new WorkMatesFragment();
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_COLUMN_COUNT, columnCount);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
+
 public static WorkMatesFragment newInstance() {
     WorkMatesFragment workMatesFragment = new WorkMatesFragment();
     return workMatesFragment;
@@ -50,9 +41,6 @@ public static WorkMatesFragment newInstance() {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
@@ -60,17 +48,30 @@ public static WorkMatesFragment newInstance() {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_work_mates_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS));
-        }
+        mRecyclerView = view.findViewById(R.id.recycler_view);
+
+        this.mUsers = new ArrayList<>();
+        transformQuerytoUser();
+        this.mAdapter = new MyItemRecyclerViewAdapter(mUsers);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         return view;
     }
+
+
+    private void transformQuerytoUser(){
+        UserHelper.getAllUsers().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> listworkmates = queryDocumentSnapshots.getDocuments();
+                for (DocumentSnapshot item: listworkmates) {
+                    User userw =  item.toObject(User.class);
+                    mUsers.add(userw);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+
 }
