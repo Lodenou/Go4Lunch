@@ -61,5 +61,9 @@ public class UserHelper {
             return UserHelper.getUsersCollection();
         }
 
+        // UPDATE USER
+        public static Task<Void> updateUser(Boolean favorite, String uid) {
+            return UserHelper.getUsersCollection().document(uid).update("favoritesRestaurants", favorite);
+        }
 }
 

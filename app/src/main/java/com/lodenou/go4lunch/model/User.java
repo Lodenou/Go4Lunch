@@ -8,6 +8,7 @@ public class User {
     private String name;
     private String avatarUrl;
     private List<String> favoritesRestaurants;
+    private boolean favorite;
 
     public User(){
 
@@ -51,6 +52,13 @@ public class User {
 
     public void setFavoritesRestaurants(List<String> favoritesRestaurants) {
         this.favoritesRestaurants = favoritesRestaurants;
+    }
+
+    public Boolean haveFavoriteRestaurant() {
+        return favorite;
+    }
+    public void setFavorite(boolean tfFavorite) {
+        this.favorite = tfFavorite;
     }
 }
 

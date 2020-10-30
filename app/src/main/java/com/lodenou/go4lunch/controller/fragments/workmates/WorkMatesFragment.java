@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.model.Document;
 import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.api.UserHelper;
 import com.lodenou.go4lunch.model.User;
