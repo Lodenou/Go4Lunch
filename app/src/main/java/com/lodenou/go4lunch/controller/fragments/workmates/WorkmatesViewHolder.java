@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lodenou.go4lunch.R;
-import com.lodenou.go4lunch.controller.activitiy.YourLunchActivity;
+import com.lodenou.go4lunch.controller.activitiy.yourlunchactivity.YourLunchActivity;
 
 public class WorkmatesViewHolder extends RecyclerView.ViewHolder {
 

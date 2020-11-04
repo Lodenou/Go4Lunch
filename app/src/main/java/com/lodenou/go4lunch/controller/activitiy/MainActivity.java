@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.PageAdapter;
+import com.lodenou.go4lunch.controller.activitiy.yourlunchactivity.YourLunchActivity;
 import com.lodenou.go4lunch.controller.api.UserHelper;
 
 import androidx.annotation.NonNull;
@@ -38,8 +39,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import org.json.JSONObject;
-
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {

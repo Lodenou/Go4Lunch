@@ -24,7 +24,6 @@ public class WorkMatesFragment extends Fragment {
 
     MyItemRecyclerViewAdapter mAdapter;
     private List<User> mUsers;
-    User mUser;
     RecyclerView mRecyclerView;
 
     public WorkMatesFragment() {
