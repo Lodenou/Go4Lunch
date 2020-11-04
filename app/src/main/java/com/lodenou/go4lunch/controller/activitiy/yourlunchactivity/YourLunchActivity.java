@@ -1,4 +1,4 @@
-package com.lodenou.go4lunch.controller.activitiy;
+package com.lodenou.go4lunch.controller.activitiy.yourlunchactivity;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -12,6 +12,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 
@@ -30,17 +32,24 @@ import java.util.List;
 public class YourLunchActivity extends AppCompatActivity {
 
     User mUser= new User();
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private List<User> mUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_your_lunch);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        toolbar.setBackgroundColor(Color.parseColor("#80000000"));
+//        setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolBarLayout.setTitle(getTitle());
+        toolBarLayout.setBackgroundColor(Color.parseColor("#800000"));
+//        toolBarLayout.setTitle(getTitle());
         getCurrentUser();
         fabClick();
+        setUpRecyclerView();
 
     }
 
@@ -74,8 +83,6 @@ public class YourLunchActivity extends AppCompatActivity {
                     Snackbar.make(view, "Ajouté aux favoris", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     fab.setImageResource(R.drawable.ic_baseline_check_circle_24);
-                    //TODO changer la couleur en #3DDC84
-//                    fab.setImageTintList(ColorStateList.valueOf());
                     fab.setColorFilter(Color.argb(250, 25, 255, 25));
                 }
 
@@ -89,4 +96,18 @@ public class YourLunchActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void setUpRecyclerView() {
+        mRecyclerView = findViewById(R.id.my_recycler_view);
+
+        // Improve performance if the size of the recyclerview won't change
+        mRecyclerView.setHasFixedSize(true);
+        //Linear layout manager
+        layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
+        // Specify the adapter
+        mAdapter = new YourLunchAdapter(mUsers);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
 }
