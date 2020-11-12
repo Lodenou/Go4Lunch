@@ -4,17 +4,21 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import com.facebook.login.LoginManager;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +32,7 @@ import com.lodenou.go4lunch.controller.api.UserHelper;
 import com.lodenou.go4lunch.model.User;
 
 import java.util.List;
+import java.util.Objects;
 
 public class YourLunchActivity extends AppCompatActivity {
 
@@ -62,12 +67,31 @@ public class YourLunchActivity extends AppCompatActivity {
     }
 
     private void getCurrentUser(){
-        UserHelper.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+
+
+//        UserHelper.getUser(mUser2.getUid())
+//                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                mUser = documentSnapshot.toObject(User.class);
+//            }
+//        });
+
+        FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(mFirebaseUser != null) {
+          String  currentUserID = mFirebaseUser.getUid();
+            UserHelper.getUser(currentUserID)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 mUser = documentSnapshot.toObject(User.class);
             }
         });
+}
+
+
+
     }
 
     private void fabClick(){

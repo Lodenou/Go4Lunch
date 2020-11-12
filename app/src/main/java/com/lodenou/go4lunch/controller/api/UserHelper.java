@@ -63,7 +63,7 @@ public class UserHelper {
 
         // UPDATE USER
         public static Task<Void> updateUser(Boolean favorite, String uid) {
-            return UserHelper.getUsersCollection().document(uid).update("favoritesRestaurants", favorite);
+            return UserHelper.getUsersCollection().document(uid).update("favorite", favorite);
         }
 }
 

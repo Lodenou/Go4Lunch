@@ -10,8 +10,8 @@ public class User {
     private List<String> favoritesRestaurants;
     private boolean favorite;
 
+    // DEFAULT CONSTRUCTOR
     public User(){
-
     }
 
     public User(String uid, String name, String avatarUrl, List<String> favoritesRestaurants) {

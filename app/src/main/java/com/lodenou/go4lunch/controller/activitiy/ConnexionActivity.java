@@ -63,6 +63,7 @@ public class ConnexionActivity extends AppCompatActivity {
     protected void onStart() {
         // Check if user is signed in (non-null) and update UI accordingly.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
         super.onStart();
     }
 
