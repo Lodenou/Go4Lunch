@@ -13,23 +13,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.api.GoogleApi;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.lodenou.go4lunch.R;
-import com.lodenou.go4lunch.controller.activitiy.MainActivity;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
 
 public class MapsFragment extends Fragment {
 
 
-    SupportMapFragment mSupportMapFragment;
+    private static final int RC_CAMERA_AND_LOCATION = 1;
+    MapsFragment fragmentMap;
     GoogleMap mGoogleMap;
 
 
@@ -51,34 +59,70 @@ public class MapsFragment extends Fragment {
          * user has installed Google Play services and returned to the app.
          */
         @Override
-    public void onMapReady(final GoogleMap googleMap) {
-            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        public void onMapReady(final GoogleMap googleMap) {
+            methodRequiresTwoPermission(googleMap);
 
+
+        }
+
+    };
+
+    @AfterPermissionGranted(RC_CAMERA_AND_LOCATION)
+    private void methodRequiresTwoPermission(final GoogleMap googleMap) {
+
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION};
+        if (EasyPermissions.hasPermissions(getContext(), perms)) {
+            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 Task<Location> task = fusedLocationProviderClient.getLastLocation();
+
                 task.addOnSuccessListener(new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
-                        if(location != null) {
+                        if (location != null) {
                             final Double currentLat = location.getLatitude();
                             final Double currentLng = location.getLongitude();
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng),10));
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), 15));
                             googleMap.addMarker(new MarkerOptions().position(new LatLng(currentLat, currentLng)));
+                            googleMap.getUiSettings().setZoomControlsEnabled(true);
                         }
                     }
                 });
             }
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, getString(R.string.camera_and_location_rationale),
+                    RC_CAMERA_AND_LOCATION, perms);
+            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+            Task<Location> task = fusedLocationProviderClient.getLastLocation();
+
+            task.addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        final Double currentLat = location.getLatitude();
+                        final Double currentLng = location.getLongitude();
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), 15));
+                        googleMap.addMarker(new MarkerOptions().position(new LatLng(currentLat, currentLng)));
+                        googleMap.getUiSettings().setZoomControlsEnabled(true);
+                    }
+                }
+            });
+        }
     }
-};
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-
-//        getCurrentLocation();
 
         return inflater.inflate(R.layout.fragment_maps, container, false);
     }

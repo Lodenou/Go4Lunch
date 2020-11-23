@@ -38,4 +38,6 @@
         "Your restaurant"
     </string>
 
+    <string name="camera_and_location_rationale"> Allow permission for position? </string>
+
 </resources>
