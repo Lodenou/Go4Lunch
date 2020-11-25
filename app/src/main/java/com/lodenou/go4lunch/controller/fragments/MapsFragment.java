@@ -62,7 +62,6 @@ public class MapsFragment extends Fragment {
         public void onMapReady(final GoogleMap googleMap) {
             methodRequiresTwoPermission(googleMap);
 
-
         }
 
     };
@@ -84,7 +83,10 @@ public class MapsFragment extends Fragment {
                             final Double currentLng = location.getLongitude();
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), 15));
                             googleMap.addMarker(new MarkerOptions().position(new LatLng(currentLat, currentLng)));
-                            googleMap.getUiSettings().setZoomControlsEnabled(true);
+
+                            //FIXME ne marche pas
+                            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+                            googleMap.getUiSettings().setCompassEnabled(true);
                         }
                     }
                 });
@@ -104,7 +106,10 @@ public class MapsFragment extends Fragment {
                         final Double currentLng = location.getLongitude();
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), 15));
                         googleMap.addMarker(new MarkerOptions().position(new LatLng(currentLat, currentLng)));
-                        googleMap.getUiSettings().setZoomControlsEnabled(true);
+
+                        //FIXME ne marche pas
+                        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+                        googleMap.getUiSettings().setCompassEnabled(true);
                     }
                 }
             });
