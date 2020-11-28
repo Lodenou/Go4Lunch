@@ -1,7 +1,9 @@
-package com.lodenou.go4lunch.model;
+package com.lodenou.go4lunch.model.nearbysearch;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.lodenou.go4lunch.model.nearbysearch.Northeast;
+import com.lodenou.go4lunch.model.nearbysearch.Southwest;
 
 public class Viewport {
 

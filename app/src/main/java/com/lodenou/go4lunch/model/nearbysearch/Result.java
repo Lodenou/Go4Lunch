@@ -1,8 +1,12 @@
-package com.lodenou.go4lunch.model;
+package com.lodenou.go4lunch.model.nearbysearch;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.lodenou.go4lunch.model.nearbysearch.Geometry;
+import com.lodenou.go4lunch.model.nearbysearch.OpeningHours;
+import com.lodenou.go4lunch.model.nearbysearch.Photo;
+import com.lodenou.go4lunch.model.nearbysearch.PlusCode;
 
 public class Result {
 

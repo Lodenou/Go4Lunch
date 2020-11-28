@@ -1,9 +1,9 @@
-package com.lodenou.go4lunch.model;
+package com.lodenou.go4lunch.model.nearbysearch;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Location {
+public class Southwest {
 
     @SerializedName("lat")
     @Expose

@@ -1,4 +1,4 @@
-package com.lodenou.go4lunch.model;
+package com.lodenou.go4lunch.model.nearbysearch;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

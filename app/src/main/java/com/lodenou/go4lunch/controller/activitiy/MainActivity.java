@@ -28,6 +28,7 @@ import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.PageAdapter;
 import com.lodenou.go4lunch.controller.activitiy.yourlunchactivity.YourLunchActivity;
 import com.lodenou.go4lunch.controller.api.UserHelper;
+import com.lodenou.go4lunch.controller.fragments.MapsFragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -104,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
     private void createNavMenu() {
         Toolbar toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
-        toolbar.setTitle("I'm Hungry!");
+        //TODO 1 if pour changer le titre des 3 fragments?
+        toolbar.setTitle("Map View");
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
         };

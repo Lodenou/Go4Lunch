@@ -1,4 +1,4 @@
-package com.lodenou.go4lunch.model;
+package com.lodenou.go4lunch.model.nearbysearch;
 
 import android.location.Location;
 
