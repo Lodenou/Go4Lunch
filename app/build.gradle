@@ -16,6 +16,9 @@ android {
     }
 
     buildTypes {
+        debug{
+            buildConfigField "String", "GOOGLE_MAP_API_KEY", GOOGLE_MAP_API_KEY
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

@@ -1,6 +1,9 @@
 package com.lodenou.go4lunch.controller.api;
 
 import com.lodenou.go4lunch.BuildConfig;
+import com.lodenou.go4lunch.model.nearbysearch.GoogleSearchResults;
+
+import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
@@ -18,6 +21,6 @@ public interface ApiClient {
     @GET("nearbysearch/json?type=restaurant&key=" + BuildConfig.GOOGLE_MAP_API_KEY)
     Call<GoogleSearchResults> getNearbyPlaces(@Query("location") String location, @Query("radius") int radius);
 
-    @GET("details/json?fields=name,vicinity,international_phone_number,website,photo,place_id&key=" + BuildConfig.GOOGLE_MAPS_API_KEY)
-    Call<GoogleDetailResult> getPlaceDetails(@Query("place_id") String placeId);
+//    @GET("details/json?fields=name,vicinity,international_phone_number,website,photo,place_id&key=" + BuildConfig.GOOGLE_MAP_API_KEY)
+//    Call<GoogleDetailResult> getPlaceDetails(@Query("place_id") String placeId);
 }

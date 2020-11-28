@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.lodenou.go4lunch.R;
+import com.lodenou.go4lunch.controller.api.ApiClient;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -62,6 +64,7 @@ public class MapsFragment extends Fragment {
         public void onMapReady(final GoogleMap googleMap) {
             methodRequiresTwoPermission(googleMap);
 
+
         }
 
     };
@@ -73,23 +76,25 @@ public class MapsFragment extends Fragment {
         if (EasyPermissions.hasPermissions(getContext(), perms)) {
             FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                Task<Location> task = fusedLocationProviderClient.getLastLocation();
+//                Task<Location> task = fusedLocationProviderClient.getLastLocation();
+//
+//                task.addOnSuccessListener(new OnSuccessListener<Location>() {
+//                    @Override
+//                    public void onSuccess(Location location) {
+//                        if (location != null) {
+//                            final Double currentLat = location.getLatitude();
+//                            final Double currentLng = location.getLongitude();
+//                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), 15));
+//                            googleMap.addMarker(new MarkerOptions().position(new LatLng(currentLat, currentLng)));
+//
+//                            //FIXME ne marche pas
+//
+//                            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+//                            googleMap.getUiSettings().setCompassEnabled(true);
 
-                task.addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            final Double currentLat = location.getLatitude();
-                            final Double currentLng = location.getLongitude();
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), 15));
-                            googleMap.addMarker(new MarkerOptions().position(new LatLng(currentLat, currentLng)));
-
-                            //FIXME ne marche pas
-                            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-                            googleMap.getUiSettings().setCompassEnabled(true);
-                        }
-                    }
-                });
+//                        }
+//                    }
+//                });
             }
         } else {
             // Do not have permissions, request them now
@@ -107,9 +112,17 @@ public class MapsFragment extends Fragment {
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), 15));
                         googleMap.addMarker(new MarkerOptions().position(new LatLng(currentLat, currentLng)));
 
-                        //FIXME ne marche pas
-                        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-                        googleMap.getUiSettings().setCompassEnabled(true);
+                        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            return;
+                        }
+                        googleMap.setMyLocationEnabled(true);
                     }
                 }
             });
