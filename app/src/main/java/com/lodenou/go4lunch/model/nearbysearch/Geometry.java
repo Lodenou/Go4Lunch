@@ -1,6 +1,5 @@
 package com.lodenou.go4lunch.model.nearbysearch;
 
-import android.location.Location;
 
 import com.google.geo.type.Viewport;
 import com.google.gson.annotations.Expose;

@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.lodenou.go4lunch.model.nearbysearch.GoogleSearchResults;
 import com.lodenou.go4lunch.model.nearbysearch.Restaurant;
+import com.lodenou.go4lunch.model.nearbysearch.Result;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -17,7 +18,7 @@ public class ApiCall{
 
     // 1 - Creating a callback
     public interface Callbacks {
-        void onResponse(@Nullable List<Restaurant> users);
+        void onResponse(@Nullable List<Result> users);
         void onFailure();
     }
 
@@ -38,7 +39,7 @@ public class ApiCall{
             @Override
             public void onResponse(Call<GoogleSearchResults> call, Response<GoogleSearchResults> response) {
                 // 2.5 - Call the proper callback used in controller (MainFragment)
-                if (callbacksWeakReference.get() != null) callbacksWeakReference.get().onResponse((List<Restaurant>) response.body());
+                if (callbacksWeakReference.get() != null) callbacksWeakReference.get().onResponse(response.body().getResults());
             }
 
             @Override

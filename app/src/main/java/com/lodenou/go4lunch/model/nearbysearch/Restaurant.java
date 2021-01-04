@@ -19,6 +19,7 @@ public class Restaurant {
     @Expose
     private String status;
 
+
     public List<Object> getHtmlAttributions() {
         return htmlAttributions;
     }
@@ -50,5 +51,4 @@ public class Restaurant {
     public void setStatus(String status) {
         this.status = status;
     }
-
 }

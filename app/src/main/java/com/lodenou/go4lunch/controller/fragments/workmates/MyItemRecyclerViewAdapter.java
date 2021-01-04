@@ -45,6 +45,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<WorkmatesVie
         // Set item views based on your views and data model
         TextView textView = holder.mContentView;
         textView.setText(user.getName());
+
         TextView textView1 = holder.mIdView;
         textView1.setText(String.valueOf(position));
 

@@ -9,6 +9,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,13 +30,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.lodenou.go4lunch.R;
+import com.lodenou.go4lunch.controller.api.ApiCall;
 import com.lodenou.go4lunch.controller.api.ApiClient;
+import com.lodenou.go4lunch.model.nearbysearch.Restaurant;
+import com.lodenou.go4lunch.model.nearbysearch.Result;
+
+import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class MapsFragment extends Fragment {
+public class MapsFragment extends Fragment implements ApiCall.Callbacks {
 
 
     private static final int RC_CAMERA_AND_LOCATION = 1;
@@ -71,30 +77,12 @@ public class MapsFragment extends Fragment {
 
     @AfterPermissionGranted(RC_CAMERA_AND_LOCATION)
     private void methodRequiresTwoPermission(final GoogleMap googleMap) {
+        mGoogleMap = googleMap;
 
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION};
         if (EasyPermissions.hasPermissions(getContext(), perms)) {
             FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//                Task<Location> task = fusedLocationProviderClient.getLastLocation();
-//
-//                task.addOnSuccessListener(new OnSuccessListener<Location>() {
-//                    @Override
-//                    public void onSuccess(Location location) {
-//                        if (location != null) {
-//                            final Double currentLat = location.getLatitude();
-//                            final Double currentLng = location.getLongitude();
-//                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), 15));
-//                            googleMap.addMarker(new MarkerOptions().position(new LatLng(currentLat, currentLng)));
-//
-//                            //FIXME ne marche pas
-//
-//                            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-//                            googleMap.getUiSettings().setCompassEnabled(true);
-
-//                        }
-//                    }
-//                });
             }
         } else {
             // Do not have permissions, request them now
@@ -113,16 +101,10 @@ public class MapsFragment extends Fragment {
                         googleMap.addMarker(new MarkerOptions().position(new LatLng(currentLat, currentLng)));
 
                         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
                             return;
                         }
                         googleMap.setMyLocationEnabled(true);
+                        executeHttpRequestWithRetrofit(currentLat, currentLng);
                     }
                 }
             });
@@ -155,4 +137,41 @@ public class MapsFragment extends Fragment {
         }
     }
 
-}
+    // 4 - Execute HTTP request and update UI
+    private void executeHttpRequestWithRetrofit(Double lat, Double lng) {
+        String location = lat.toString() + "," + lng.toString();
+        ApiCall.fetchRestaurantsNear(this, location, 5000);
+    }
+
+
+    @Override
+    public void onResponse(@Nullable List<Result> results) {
+        Log.d("error5555", "on response");
+        //TODO
+        if (results != null) {
+            int i = 0;
+            while(i < results.size()) {
+
+                double currentLat = results.get(i).getGeometry().getLocation().getLat();
+                double currentLng = results.get(i).getGeometry().getLocation().getLng();
+
+                mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(currentLat, currentLng)));
+                i++;
+
+            }
+        }
+    }
+
+    @Override
+    public void onFailure() {
+        Log.d("error", "on failure");
+    }
+
+
+    // 3 - Update UI showing only name of users
+    private void updateUIWithResult(List<Result> results){
+            
+        }
+    }
+
+
