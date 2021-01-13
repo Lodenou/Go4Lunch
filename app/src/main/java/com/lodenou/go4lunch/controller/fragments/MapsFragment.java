@@ -101,7 +101,7 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
                         final Double currentLat = location.getLatitude();
                         final Double currentLng = location.getLongitude();
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLat, currentLng), 15));
-                        googleMap.addMarker(new MarkerOptions().position(new LatLng(currentLat, currentLng)));
+//                        googleMap.addMarker(new MarkerOptions().position(new LatLng(currentLat, currentLng)));
 
                         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             return;
