@@ -78,8 +78,6 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks {
     // 4 - Execute HTTP request and update UI
 
     private void executeHttpRequestWithRetrofit() {
-//        this.updateUIWhenStartingHTTPRequest();
-//        String location = lat.toString()+","+lng.toString();
         FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
