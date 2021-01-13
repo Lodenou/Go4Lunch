@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +27,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -155,9 +158,20 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
                 double currentLat = results.get(i).getGeometry().getLocation().getLat();
                 double currentLng = results.get(i).getGeometry().getLocation().getLng();
 
-                mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(currentLat, currentLng)));
-                i++;
 
+                // resize the marker
+                int height = 100;
+                int width = 70;
+                BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_orange);
+                Bitmap b = bitmapdraw.getBitmap();
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+                // add orange markers
+                mGoogleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(currentLat, currentLng))
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+                i++;
+                //TODO ADD GREEN MARKERS
             }
         }
     }
