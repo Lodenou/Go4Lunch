@@ -36,7 +36,7 @@ import java.util.Objects;
 
 public class YourLunchActivity extends AppCompatActivity {
 
-    User mUser= new User();
+    User mUser = new User();
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -58,16 +58,15 @@ public class YourLunchActivity extends AppCompatActivity {
 
     }
 
-    private void setFavoriteRestaurant(){
-        UserHelper.updateUser(true,FirebaseAuth.getInstance().getCurrentUser().getUid());
+    private void setFavoriteRestaurant() {
+        UserHelper.updateUser(true, FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
-    private void unsetFavoriteRestaurant(){
-        UserHelper.updateUser(false,FirebaseAuth.getInstance().getCurrentUser().getUid());
+    private void unsetFavoriteRestaurant() {
+        UserHelper.updateUser(false, FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
-    private void getCurrentUser(){
-
+    private void getCurrentUser() {
 
 
 //        UserHelper.getUser(mUser2.getUid())
@@ -79,22 +78,24 @@ public class YourLunchActivity extends AppCompatActivity {
 //        });
 
         FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(mFirebaseUser != null) {
-          String  currentUserID = mFirebaseUser.getUid();
+        if (mFirebaseUser != null) {
+            String currentUserID = mFirebaseUser.getUid();
             UserHelper.getUser(currentUserID)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                mUser = documentSnapshot.toObject(User.class);
-            }
-        });
-}
-
-
-
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            mUser = documentSnapshot.toObject(User.class);
+                        }
+                    });
+        }
     }
 
-    private void fabClick(){
+
+    private void getLunchInformation(){
+        //TODO
+    }
+
+    private void fabClick() {
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -108,9 +109,7 @@ public class YourLunchActivity extends AppCompatActivity {
                             .setAction("Action", null).show();
                     fab.setImageResource(R.drawable.ic_baseline_check_circle_24);
                     fab.setColorFilter(Color.argb(250, 25, 255, 25));
-                }
-
-                else {
+                } else {
                     mUser.setFavorite(false);
                     unsetFavoriteRestaurant();
                     fab.setImageResource(R.drawable.ic_baseline_crop_din_24);
