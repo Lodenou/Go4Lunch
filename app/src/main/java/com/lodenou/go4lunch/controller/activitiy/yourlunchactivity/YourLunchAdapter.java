@@ -32,7 +32,7 @@ public class YourLunchAdapter extends RecyclerView.Adapter<YourLunchViewHolder> 
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View view = inflater.inflate(R.layout.fragment_list_view, parent, false);
+        View view = inflater.inflate(R.layout.fragment_list_view_users, parent, false);
 
         // Return a new holder instance
         YourLunchViewHolder viewHolder = new YourLunchViewHolder(view);

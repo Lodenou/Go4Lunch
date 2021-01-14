@@ -30,7 +30,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<WorkmatesVie
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View view = inflater.inflate(R.layout.fragment_list_view, parent, false);
+        View view = inflater.inflate(R.layout.fragment_list_view_users, parent, false);
 
         // Return a new holder instance
         WorkmatesViewHolder viewHolder = new WorkmatesViewHolder(view);
