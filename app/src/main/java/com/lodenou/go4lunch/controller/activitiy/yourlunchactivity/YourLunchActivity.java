@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.core.UserData;
 import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.api.UserHelper;
 import com.lodenou.go4lunch.model.User;
+import com.lodenou.go4lunch.model.nearbysearch.Result;
 
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +43,7 @@ public class YourLunchActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<User> mUsers;
+    private List<Result> mRestaurants;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,16 +70,6 @@ public class YourLunchActivity extends AppCompatActivity {
     }
 
     private void getCurrentUser() {
-
-
-//        UserHelper.getUser(mUser2.getUid())
-//                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                mUser = documentSnapshot.toObject(User.class);
-//            }
-//        });
-
         FirebaseUser mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (mFirebaseUser != null) {
             String currentUserID = mFirebaseUser.getUid();
@@ -131,6 +124,12 @@ public class YourLunchActivity extends AppCompatActivity {
         // Specify the adapter
         mAdapter = new YourLunchAdapter(mUsers);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void setRestaurantInformations(){
+        TextView restaurantName = findViewById(R.id.restaurant_name);
+
+//        restaurantName.setText(mRestaurants.);
     }
 
 }

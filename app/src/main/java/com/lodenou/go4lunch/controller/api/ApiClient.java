@@ -22,6 +22,6 @@ public interface ApiClient {
     @GET("nearbysearch/json?type=restaurant&key=" + BuildConfig.GOOGLE_MAP_API_KEY)
     Call<GoogleSearchResults> getNearbyPlaces(@Query("location") String location, @Query("radius") int radius);
 
-    @GET("details/json?place_id&fields=name,vicinity,international_phone_number,website,photo&key=" + BuildConfig.GOOGLE_MAP_API_KEY)
+    @GET("details/json?fields=name,vicinity,international_phone_number,website,photo&key=" + BuildConfig.GOOGLE_MAP_API_KEY)
     Call<GoogleDetailResult> getPlaceDetails(@Query("place_id") String placeId);
 }
