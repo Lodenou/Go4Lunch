@@ -38,21 +38,21 @@ public class ListViewViewHolder extends RecyclerView.ViewHolder {
 
 
 
-        startLunchActivityOnClick();
+//        startLunchActivityOnClick();
     }
 
 
-    private void startLunchActivityOnClick(){
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Context context = v.getContext();
-                Intent intent = new Intent(context, YourLunchActivity.class);
-                //TODO envoyer le nom du restaurant selectionné dans la liste
-//                intent.putExtra("key", res)
-                context.startActivity(intent);
-            }
-        });
-    }
+//    private void startLunchActivityOnClick(){
+//        itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Context context = v.getContext();
+//                Intent intent = new Intent(context, YourLunchActivity.class);
+//                //TODO envoyer le nom du restaurant selectionné dans la liste
+////                intent.putExtra("key", res)
+//                context.startActivity(intent);
+//            }
+//        });
+//    }
 }
