@@ -2,6 +2,7 @@ package com.lodenou.go4lunch.controller.api;
 
 import androidx.annotation.Nullable;
 
+import com.lodenou.go4lunch.model.detail.GoogleDetailResult;
 import com.lodenou.go4lunch.model.nearbysearch.GoogleSearchResults;
 import com.lodenou.go4lunch.model.nearbysearch.Restaurant;
 import com.lodenou.go4lunch.model.nearbysearch.Result;
@@ -51,4 +52,30 @@ public class ApiCall{
     }
 
     //TODO pour detail
+    public interface Callbacks2 {
+//        void onResponse(@Nullable Result users);
+        void onFailure();
+        void onResponse(com.lodenou.go4lunch.model.detail.Result result);
+    }
+
+    public static void fetchDetail(Callbacks2 callbacks, String placeId) {
+
+        final WeakReference<Callbacks2> callbacksWeakReference = new WeakReference<Callbacks2>(callbacks);
+
+        ApiClient apiClient = ApiClient.retrofit.create(ApiClient.class);
+
+        Call<GoogleDetailResult> call = apiClient.getPlaceDetails(placeId);
+
+        call.enqueue(new Callback<GoogleDetailResult>() {
+            @Override
+            public void onResponse(Call<GoogleDetailResult> call, Response<GoogleDetailResult> response) {
+                if (callbacksWeakReference.get() != null) callbacksWeakReference.get().onResponse(response.body().getResult());
+            }
+
+            @Override
+            public void onFailure(Call<GoogleDetailResult> call, Throwable t) {
+                if (callbacksWeakReference.get() != null) callbacksWeakReference.get().onFailure();
+            }
+        });
+    }
 }
