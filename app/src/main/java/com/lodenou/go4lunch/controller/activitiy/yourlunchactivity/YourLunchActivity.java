@@ -73,6 +73,8 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
         fabClick();
         setUpRecyclerView();
         getCallBack();
+        //FIXME ne marche pas
+        setIcons();
     }
 
     private void setFavoriteRestaurant() {
@@ -94,6 +96,16 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
                             mUser = documentSnapshot.toObject(User.class);
                         }
                     });
+        }
+    }
+    //FIXME ne marche pas
+    private void setIcons(){
+        ImageView imageStar = findViewById(R.id.image_star);
+        if (!mUser.haveFavoriteRestaurant()){
+            imageStar.setVisibility(View.INVISIBLE);
+        }
+        else {
+            imageStar.setVisibility(View.VISIBLE);
         }
     }
 
@@ -153,6 +165,7 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
         ImageView restaurantImage = findViewById(R.id.restaurant_image2);
         Button phoneButton = findViewById(R.id.call_button);
         Button websiteButton = findViewById(R.id.website_button);
+        Button starButton = findViewById(R.id.star_button);
 
 
         restaurantName.setText(result.getName());
@@ -176,6 +189,28 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
+            }
+        });
+
+        starButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageView imageStar = findViewById(R.id.image_star);
+
+
+                if (!mUser.haveFavoriteRestaurant()) {
+                    mUser.setFavorite(true);
+                    setFavoriteRestaurant();
+                    imageStar.setVisibility(View.VISIBLE);
+                    Snackbar.make(v, "Ajouté aux favoris", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    mUser.setFavorite(false);
+                    unsetFavoriteRestaurant();
+                    imageStar.setVisibility(View.INVISIBLE);
+                    Snackbar.make(v, "Retiré des favoris", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
 
