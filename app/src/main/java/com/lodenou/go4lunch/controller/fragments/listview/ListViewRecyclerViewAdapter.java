@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+
 public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewViewHolder> {
 
 
@@ -39,7 +40,7 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewVi
     @NonNull
     @Override
     public ListViewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-         context = parent.getContext();
+        context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(R.layout.fragment_list_view, parent, false);
@@ -77,8 +78,7 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewVi
         if (restaurant.getPhotos() != null && restaurant.getPhotos().size() > 0) {
             Glide.with(context).load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=400&photoreference=" + restaurant.getPhotos().get(0).getPhotoReference() + "&key=" + BuildConfig.GOOGLE_MAP_API_KEY)
                     .into(restaurantImage);
-        }
-        else {
+        } else {
 
         }
 
