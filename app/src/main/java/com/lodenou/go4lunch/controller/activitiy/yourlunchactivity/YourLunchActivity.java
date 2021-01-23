@@ -4,10 +4,12 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -20,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,15 +31,18 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.core.UserData;
+import com.lodenou.go4lunch.BuildConfig;
 import com.lodenou.go4lunch.R;
+import com.lodenou.go4lunch.controller.api.ApiCall;
 import com.lodenou.go4lunch.controller.api.UserHelper;
 import com.lodenou.go4lunch.model.User;
+import com.lodenou.go4lunch.model.nearbysearch.Restaurant;
 import com.lodenou.go4lunch.model.nearbysearch.Result;
 
 import java.util.List;
 import java.util.Objects;
 
-public class YourLunchActivity extends AppCompatActivity {
+public class YourLunchActivity extends AppCompatActivity implements ApiCall.Callbacks2 {
 
     User mUser = new User();
     private RecyclerView mRecyclerView;
@@ -44,21 +50,22 @@ public class YourLunchActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private List<User> mUsers;
     private List<Result> mRestaurants;
+    private Restaurant mRestaurant;
+    private Result mResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_your_lunch);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        toolbar.setBackgroundColor(Color.parseColor("#80000000"));
+//        toolbar.setBackgroundColor(Color.parseColor("#544554"));
 //        setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolBarLayout.setBackgroundColor(Color.parseColor("#800000"));
-//        toolBarLayout.setTitle(getTitle());
         getCurrentUser();
         fabClick();
         setUpRecyclerView();
-
+        getCallBack();
     }
 
     private void setFavoriteRestaurant() {
@@ -81,11 +88,6 @@ public class YourLunchActivity extends AppCompatActivity {
                         }
                     });
         }
-    }
-
-
-    private void getLunchInformation(){
-        //TODO
     }
 
     private void fabClick() {
@@ -126,10 +128,27 @@ public class YourLunchActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    private void setRestaurantInformations(){
-        TextView restaurantName = findViewById(R.id.restaurant_name);
-
-//        restaurantName.setText(mRestaurants.);
+    public void getCallBack() {
+        String value = getIntent().getStringExtra("key");
+        ApiCall.fetchDetail(this, value);
     }
 
+    @Override
+    public void onFailure() {
+
+    }
+
+    @Override
+    public void onResponse(com.lodenou.go4lunch.model.detail.Result result) {
+
+        TextView restaurantName = findViewById(R.id.restaurant_name2);
+        TextView restaurantAddress = findViewById(R.id.restaurant_address2);
+        ImageView restaurantImage = findViewById(R.id.restaurant_image2);
+
+
+        restaurantName.setText(result.getName());
+        restaurantAddress.setText(result.getVicinity());
+        Glide.with(getApplicationContext()).load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=400&photoreference=" + result.getPhotos().get(0).getPhotoReference() + "&key=" + BuildConfig.GOOGLE_MAP_API_KEY)
+                .into(restaurantImage);
+    }
 }
