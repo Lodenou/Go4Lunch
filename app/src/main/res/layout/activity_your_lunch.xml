@@ -29,7 +29,16 @@
                 android:fitsSystemWindows="true"
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:toolbarId="@+id/toolbar">
+                >
+
+                <ImageView
+                    android:id="@+id/restaurant_image2"
+                    android:src="@drawable/no_image_avalaible"
+                    android:scaleType="centerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </ImageView>
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -49,7 +58,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/restaurant_name"
+                android:id="@+id/restaurant_name2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -62,7 +71,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/restaurant_description"
+                android:id="@+id/restaurant_address2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
