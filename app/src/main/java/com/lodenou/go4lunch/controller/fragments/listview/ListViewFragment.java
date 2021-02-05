@@ -61,9 +61,9 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks {
         View view = inflater.inflate(R.layout.fragment_list_view_list, container, false);
         setRecyclerView(view);
         executeHttpRequestWithRetrofit();
+
         return view;
     }
-
 
     private void setRecyclerView(View view) {
         mRecyclerView = view.findViewById(R.id.recycler_view_list_view);

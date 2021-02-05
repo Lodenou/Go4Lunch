@@ -32,6 +32,7 @@ import com.lodenou.go4lunch.controller.fragments.MapsFragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -93,6 +94,31 @@ public class MainActivity extends AppCompatActivity {
         tabs.setupWithViewPager(pager);
         // Design purpose. Tabs have the same width
         tabs.setTabMode(TabLayout.MODE_FIXED);
+        final ActionBar toolbar = getSupportActionBar();
+        toolbar.setTitle("I'm hungry !");
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0: toolbar.setTitle("I'm hungry !");
+                    break;
+                    case 1: toolbar.setTitle("I'm hungry !");
+                    break;
+                    case 2: toolbar.setTitle("Available workmates");
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void setTabIcons() {
@@ -104,9 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createNavMenu() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-        //TODO 1 if pour changer le titre des 3 fragments?
-        toolbar.setTitle("Map View");
+        setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
         };
