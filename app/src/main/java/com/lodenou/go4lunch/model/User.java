@@ -6,6 +6,9 @@ public class User {
 
     private String uid;
     private String name;
+    private String restaurantName;
+    private String restaurantUid;
+    private String restaurantAddress;
     private String avatarUrl;
     private List<String> favoritesRestaurants;
     private boolean favorite;
@@ -14,11 +17,13 @@ public class User {
     public User(){
     }
 
-    public User(String uid, String name, String avatarUrl, List<String> favoritesRestaurants) {
+    public User(String uid, String name, String restaurantName, String restaurantUid, String restaurantAddress, String avatarUrl, List<String> favoritesRestaurants) {
         this.uid = uid;
         this.name = name;
+        this.restaurantName = restaurantName;
+        this.restaurantUid = restaurantUid;
+        this.restaurantAddress = restaurantAddress;
         this.avatarUrl = avatarUrl;
-
         this.favoritesRestaurants = favoritesRestaurants;
     }
 
@@ -54,11 +59,36 @@ public class User {
         this.favoritesRestaurants = favoritesRestaurants;
     }
 
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
+    public String getRestaurantUid() {
+        return restaurantUid;
+    }
+
+    public void setRestaurantUid(String restaurantUid) {
+        this.restaurantUid = restaurantUid;
+    }
+
+    public String getRestaurantAddress() {
+        return restaurantAddress;
+    }
+
+    public void setRestaurantAddress(String restaurantAddress) {
+        this.restaurantAddress = restaurantAddress;
+    }
+
     public Boolean haveFavoriteRestaurant() {
         return favorite;
     }
     public void setFavorite(boolean tfFavorite) {
         this.favorite = tfFavorite;
     }
+
 }
 
