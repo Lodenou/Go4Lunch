@@ -12,16 +12,17 @@ public class User {
     private String avatarUrl;
     private List<String> favoritesRestaurants;
     private boolean favorite;
+    private boolean haveRestaurant;
 
     // DEFAULT CONSTRUCTOR
     public User(){
     }
 
-    public User(String uid, String name, String restaurantName, String restaurantUid, String restaurantAddress, String avatarUrl, List<String> favoritesRestaurants) {
+    public User(String uid, String name, String restaurantName, String restaurantPlaceId, String restaurantAddress, String avatarUrl, List<String> favoritesRestaurants) {
         this.uid = uid;
         this.name = name;
         this.restaurantName = restaurantName;
-        this.restaurantUid = restaurantUid;
+        this.restaurantUid = restaurantPlaceId;
         this.restaurantAddress = restaurantAddress;
         this.avatarUrl = avatarUrl;
         this.favoritesRestaurants = favoritesRestaurants;
@@ -67,11 +68,11 @@ public class User {
         this.restaurantName = restaurantName;
     }
 
-    public String getRestaurantUid() {
+    public String getRestaurantPlaceId() {
         return restaurantUid;
     }
 
-    public void setRestaurantUid(String restaurantUid) {
+    public void setRestaurantPlaceId(String restaurantUid) {
         this.restaurantUid = restaurantUid;
     }
 
@@ -86,8 +87,18 @@ public class User {
     public Boolean haveFavoriteRestaurant() {
         return favorite;
     }
+
     public void setFavorite(boolean tfFavorite) {
         this.favorite = tfFavorite;
+    }
+
+
+    public Boolean HaveRestaurantSet(){
+        return haveRestaurant;
+    }
+
+    public void setRestaurant(Boolean tf) {
+        this.haveRestaurant = tf;
     }
 
 }
