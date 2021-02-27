@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
             String username = this.getCurrentUser().getDisplayName();
             String uid = this.getCurrentUser().getUid();
 
-            UserHelper.createUser(uid, username, urlPicture, null).addOnFailureListener(this.onFailureListener());
+            UserHelper.createUser(uid, username, null, null, null, urlPicture,null).addOnFailureListener(this.onFailureListener());
         }
     }
 
