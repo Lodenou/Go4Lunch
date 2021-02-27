@@ -10,7 +10,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-        resValue "string", "google_map_id", ''
+        resValue "string", "google_map_id", 'GOOGLE_MAP_API_KEY'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -70,8 +70,8 @@ dependencies {
     // Gson
     implementation 'com.google.code.gson:gson:2.8.6'
     //retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
 
 }
