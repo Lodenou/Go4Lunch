@@ -1,6 +1,7 @@
 package com.lodenou.go4lunch.controller.activitiy.yourlunchactivity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -40,6 +41,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.core.UserData;
 import com.lodenou.go4lunch.BuildConfig;
 import com.lodenou.go4lunch.R;
+import com.lodenou.go4lunch.controller.activitiy.MainActivity;
 import com.lodenou.go4lunch.controller.api.ApiCall;
 import com.lodenou.go4lunch.controller.api.UserHelper;
 import com.lodenou.go4lunch.model.User;
@@ -58,7 +60,7 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
     private List<User> mUsers;
     private List<Result> mRestaurants;
     private Restaurant mRestaurant;
-    private Result mResult;
+    private com.lodenou.go4lunch.model.detail.Result mResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,15 +69,16 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        toolbar.setBackgroundColor(Color.parseColor("#544554"));
 //        setSupportActionBar(toolbar);
-        CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolBarLayout.setBackgroundColor(Color.parseColor("#800000"));
+//        CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+//        toolBarLayout.setBackgroundColor(Color.parseColor("#800000"));
         getCurrentUser();
-        fabClick();
+//        fabClick();
         setUpRecyclerView();
         getCallBack();
         //FIXME ne marche pas
         setIcons();
     }
+
 
     private void setFavoriteRestaurant() {
         UserHelper.updateUser(true, FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -83,6 +86,12 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
 
     private void unsetFavoriteRestaurant() {
         UserHelper.updateUser(false, FirebaseAuth.getInstance().getCurrentUser().getUid());
+    }
+
+    //TODO A AMELIORER
+    private void recordUserRestaurant(){
+        String value = getIntent().getStringExtra("key");
+        UserHelper.updateUserWithRestaurantInfo(FirebaseAuth.getInstance().getCurrentUser().getUid(),value, mResult.getName(), mResult.getVicinity());
     }
 
     private void getCurrentUser() {
@@ -101,7 +110,7 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
     //FIXME ne marche pas
     private void setIcons(){
         ImageView imageStar = findViewById(R.id.image_star);
-        if (!mUser.haveFavoriteRestaurant()){
+        if (mUser.getFavoritesRestaurants() != null){
             imageStar.setVisibility(View.INVISIBLE);
         }
         else {
@@ -109,30 +118,30 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
         }
     }
 
-    private void fabClick() {
-
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (!mUser.haveFavoriteRestaurant()) {
-                    mUser.setFavorite(true);
-                    setFavoriteRestaurant();
-                    Snackbar.make(view, "Ajouté aux favoris", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    fab.setImageResource(R.drawable.ic_baseline_check_circle_24);
-                    fab.setColorFilter(Color.argb(250, 25, 255, 25));
-                } else {
-                    mUser.setFavorite(false);
-                    unsetFavoriteRestaurant();
-                    fab.setImageResource(R.drawable.ic_baseline_crop_din_24);
-                    Snackbar.make(view, "Retiré des favoris", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            }
-        });
-    }
+//    private void fabClick() {
+//        //TODO s'inspirer de setFavoriteRestaurant à faire dans le onResponse
+//        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                if (!mUser.haveFavoriteRestaurant()) {
+//                    mUser.setFavorite(true);
+//                    setFavoriteRestaurant();
+//                    Snackbar.make(view, "Ajouté aux favoris", Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show();
+//                    fab.setImageResource(R.drawable.ic_baseline_check_circle_24);
+//                    fab.setColorFilter(Color.argb(250, 25, 255, 25));
+//                } else {
+//                    mUser.setFavorite(false);
+//                    unsetFavoriteRestaurant();
+//                    fab.setImageResource(R.drawable.ic_baseline_crop_din_24);
+//                    Snackbar.make(view, "Retiré des favoris", Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show();
+//                }
+//            }
+//        });
+//    }
 
     private void setUpRecyclerView() {
         mRecyclerView = findViewById(R.id.my_recycler_view);
@@ -160,12 +169,15 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
     @Override
     public void onResponse(final com.lodenou.go4lunch.model.detail.Result result) {
 
-        TextView restaurantName = findViewById(R.id.restaurant_name2);
+        final TextView restaurantName = findViewById(R.id.restaurant_name2);
         TextView restaurantAddress = findViewById(R.id.restaurant_address2);
         ImageView restaurantImage = findViewById(R.id.restaurant_image2);
         Button phoneButton = findViewById(R.id.call_button);
         Button websiteButton = findViewById(R.id.website_button);
         Button starButton = findViewById(R.id.star_button);
+        final ImageView imageStar = findViewById(R.id.image_star);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        mResult = result;
 
 
         restaurantName.setText(result.getName());
@@ -195,20 +207,42 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
         starButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageView imageStar = findViewById(R.id.image_star);
 
 
-                if (!mUser.haveFavoriteRestaurant()) {
-                    mUser.setFavorite(true);
+                if (mUser.getFavoritesRestaurants() == null) {
+//                    mUser.setFavorite(true);
                     setFavoriteRestaurant();
                     imageStar.setVisibility(View.VISIBLE);
                     Snackbar.make(v, "Ajouté aux favoris", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
-                    mUser.setFavorite(false);
+//                    mUser.setFavorite(false);
                     unsetFavoriteRestaurant();
                     imageStar.setVisibility(View.INVISIBLE);
                     Snackbar.make(v, "Retiré des favoris", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            }
+        });
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                mUser.setRestaurant(false);
+
+                if (mUser.getRestaurantPlaceId() != null) {
+//                    mUser.setRestaurant(true);
+                    recordUserRestaurant();
+                    Snackbar.make(view, "Vous allez manger au restaurant "+result.getName(), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    fab.setImageResource(R.drawable.ic_baseline_check_circle_24);
+                    fab.setColorFilter(Color.argb(250, 25, 255, 25));
+                }
+
+                else {
+//                    mUser.setRestaurant(false);
+                    fab.setImageResource(R.drawable.ic_baseline_crop_din_24);
+                    Snackbar.make(view, "Vous ne mangez plus au restaurant "+result.getName(), Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
             }
