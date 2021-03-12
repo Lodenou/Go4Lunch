@@ -1,5 +1,7 @@
 package com.lodenou.go4lunch.controller.activitiy;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,15 +22,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.PageAdapter;
 import com.lodenou.go4lunch.controller.activitiy.yourlunchactivity.YourLunchActivity;
 import com.lodenou.go4lunch.controller.api.UserHelper;
-import com.lodenou.go4lunch.controller.fragments.MapsFragment;
+import com.lodenou.go4lunch.model.User;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     };
     GoogleSignInClient mGoogleApiClient;
     private final String TAG = "cycle";
+    User mUser;
 
 
 
@@ -204,14 +209,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setNavMenuOnClicks() {
+
         NavigationView mNavigationView = findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_yourlunch:
-                        Intent intent = new Intent(MainActivity.this, YourLunchActivity.class);
-                        startActivity(intent);
+                        mUser = new User();
+                        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        UserHelper.getUser(id).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                mUser = documentSnapshot.toObject(User.class);
+
+                                if(mUser.getRestaurantPlaceId() != null) {
+                                    Intent intent = new Intent(MainActivity.this, YourLunchActivity.class);
+                                    intent.putExtra("key", mUser.getRestaurantPlaceId());
+                                    startActivity(intent);
+                                }
+                                else{
+                                    new AlertDialog.Builder(MainActivity.this)
+                                            .setTitle("Oops")
+                                            .setMessage("You didn't chose a restaurant !")
+                                            .show();
+                                }
+                            }
+                        });
                         return true;
                     case R.id.nav_settings:
                         Intent intent2 = new Intent(MainActivity.this, SettingsActivity.class);
@@ -269,26 +293,49 @@ public class MainActivity extends AppCompatActivity {
         return (this.getCurrentUser() != null);
     }
 
-    protected OnFailureListener onFailureListener(){
-        return new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Firestore Error", Toast.LENGTH_LONG).show();
-            }
-        };
-    }
-
-
 
     // 1 - Http request that create user in firestore
     private void createUserInFirestore(){
         if (this.getCurrentUser() != null){
 
-            String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
-            String username = this.getCurrentUser().getDisplayName();
-            String uid = this.getCurrentUser().getUid();
+            final String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
+            final String username = this.getCurrentUser().getDisplayName();
+            final String uid = this.getCurrentUser().getUid();
 
-            UserHelper.createUser(uid, username, null, null, null, urlPicture,null).addOnFailureListener(this.onFailureListener());
+            mUser = new User();
+            String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            UserHelper.getUser(id).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    mUser = documentSnapshot.toObject(User.class);
+                    if (mUser != null){
+                    UserHelper.createUser(uid, username, mUser.getRestaurantName(), mUser.getRestaurantPlaceId(), mUser.getRestaurantAddress(), urlPicture,mUser.getFavoritesRestaurants()).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Firestore Error", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    }
+                    else{
+                        UserHelper.createUser(uid, username, null, null,null, urlPicture,null).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Firestore Error", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    UserHelper.createUser(uid, username, null, null,null, urlPicture,null).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Firestore Error", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
         }
     }
 
