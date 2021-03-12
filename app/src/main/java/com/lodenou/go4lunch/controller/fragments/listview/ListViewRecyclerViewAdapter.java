@@ -15,9 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.lodenou.go4lunch.BuildConfig;
 import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.activitiy.yourlunchactivity.YourLunchActivity;
+import com.lodenou.go4lunch.controller.api.UserHelper;
+import com.lodenou.go4lunch.model.User;
 import com.lodenou.go4lunch.model.nearbysearch.Result;
 
 import java.io.IOException;
@@ -66,14 +71,36 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewVi
         restaurantName.setText(restaurant.getName());
         restaurantAddress.setText(restaurant.getVicinity());
         //TODO REMPLACER OPERATIONAL ETC
-        openingHours.setText(restaurant.getBusinessStatus());
+
+        if (restaurant.getOpeningHours() != null) {
+            if (restaurant.getOpeningHours().getOpenNow()) {
+            openingHours.setText("Open");
+        }
+        else {
+            openingHours.setText("Closed");
+            }
+        }
+        else {
+            openingHours.setText("Pas d'horaire spécifié");
+        }
         //TODO distance à calculer
         distance.setText(restaurant.getScope());
         //TODO workmatesnumber
+        UserHelper.getAllUsers().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> listworkmates = queryDocumentSnapshots.getDocuments();
+                for (DocumentSnapshot item: listworkmates) {
+                    User userw =  item.toObject(User.class);
+//                    mUsers.add(userw);
+//                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
         workmatesNumber.setText(restaurant.getUserRatingsTotal().toString());
         ratingStars.setText(restaurant.getRating().toString());
 
-        //TODO image du restaurant
 
         if (restaurant.getPhotos() != null && restaurant.getPhotos().size() > 0) {
             Glide.with(context).load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=400&photoreference=" + restaurant.getPhotos().get(0).getPhotoReference() + "&key=" + BuildConfig.GOOGLE_MAP_API_KEY)
