@@ -60,9 +60,15 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_view_list, container, false);
         setRecyclerView(view);
-        executeHttpRequestWithRetrofit();
+
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        executeHttpRequestWithRetrofit();
     }
 
     private void setRecyclerView(View view) {
