@@ -4,25 +4,28 @@ import java.util.List;
 
 public class User {
 
-    private String uid;
-    private String name;
-    private String restaurantName;
-    private String restaurantUid;
-    private String restaurantAddress;
+
     private String avatarUrl;
     private List<String> favoritesRestaurants;
-    private boolean favorite;
-    private boolean haveRestaurant;
+    private String name;
+    private String restaurantAddress;
+    private String restaurantName;
+    private String restaurantPlaceId;
+    private String uid;
+
+//
+//    private boolean favorite;
+//    private boolean haveRestaurant;
 
     // DEFAULT CONSTRUCTOR
-    public User(){
+    public User() {
     }
 
     public User(String uid, String name, String restaurantName, String restaurantPlaceId, String restaurantAddress, String avatarUrl, List<String> favoritesRestaurants) {
         this.uid = uid;
         this.name = name;
         this.restaurantName = restaurantName;
-        this.restaurantUid = restaurantPlaceId;
+        this.restaurantPlaceId = restaurantPlaceId;
         this.restaurantAddress = restaurantAddress;
         this.avatarUrl = avatarUrl;
         this.favoritesRestaurants = favoritesRestaurants;
@@ -69,11 +72,11 @@ public class User {
     }
 
     public String getRestaurantPlaceId() {
-        return restaurantUid;
+        return restaurantPlaceId;
     }
 
     public void setRestaurantPlaceId(String restaurantUid) {
-        this.restaurantUid = restaurantUid;
+        this.restaurantPlaceId = restaurantUid;
     }
 
     public String getRestaurantAddress() {
@@ -83,23 +86,24 @@ public class User {
     public void setRestaurantAddress(String restaurantAddress) {
         this.restaurantAddress = restaurantAddress;
     }
-
-    public Boolean haveFavoriteRestaurant() {
-        return favorite;
-    }
-
-    public void setFavorite(boolean tfFavorite) {
-        this.favorite = tfFavorite;
-    }
-
-
-    public Boolean HaveRestaurantSet(){
-        return haveRestaurant;
-    }
-
-    public void setRestaurant(Boolean tf) {
-        this.haveRestaurant = tf;
-    }
-
 }
+
+//    public Boolean haveFavoriteRestaurant() {
+//        return favorite;
+//    }
+//
+//    public void setFavorite(boolean tfFavorite) {
+//        this.favorite = tfFavorite;
+//    }
+//
+//
+//    public Boolean haveRestaurantSet(){
+//        return haveRestaurant;
+//    }
+//
+//    public void setRestaurant(Boolean tf) {
+//        this.haveRestaurant = tf;
+//    }
+//
+
 
