@@ -76,9 +76,8 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
         setUpRecyclerView();
         getCallBack();
         //FIXME ne marche pas
-        setIcons();
+//        setIcons();
     }
-
 
     private void setFavoriteRestaurant() {
         UserHelper.updateUser(true, FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -107,6 +106,8 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
                     });
         }
     }
+
+//    public void
     //FIXME ne marche pas
     private void setIcons(){
         ImageView imageStar = findViewById(R.id.image_star);
@@ -230,8 +231,8 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
             public void onClick(View view) {
 //                mUser.setRestaurant(false);
 
-                if (mUser.getRestaurantPlaceId() != null) {
-//                    mUser.setRestaurant(true);
+                if (mUser.getRestaurantPlaceId() == null) {
+
                     recordUserRestaurant();
                     Snackbar.make(view, "Vous allez manger au restaurant "+result.getName(), Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
@@ -240,7 +241,7 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
                 }
 
                 else {
-//                    mUser.setRestaurant(false);
+
                     fab.setImageResource(R.drawable.ic_baseline_crop_din_24);
                     Snackbar.make(view, "Vous ne mangez plus au restaurant "+result.getName(), Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
