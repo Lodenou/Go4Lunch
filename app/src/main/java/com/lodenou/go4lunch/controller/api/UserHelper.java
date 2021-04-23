@@ -1,25 +1,15 @@
 package com.lodenou.go4lunch.controller.api;
 
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.lodenou.go4lunch.model.User;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 // THIS CLASS STATICALLY REFERS CRUD REQUESTS
 public class UserHelper {
@@ -35,7 +25,7 @@ public class UserHelper {
     // --- CREATE ---
 
     public static Task<Void> createUser(String uid, String name, String restaurantName, String restaurantPlaceId, String restaurantAddress, String avatarUrl, List<String> favoritesRestaurants) {
-        User userToCreate = new User(uid, name, restaurantName, restaurantPlaceId, restaurantAddress, avatarUrl , favoritesRestaurants);
+        User userToCreate = new User(uid, name, restaurantName, restaurantPlaceId, restaurantAddress, avatarUrl, favoritesRestaurants);
         return UserHelper.getUsersCollection().document(uid).set(userToCreate);
     }
 
@@ -57,17 +47,31 @@ public class UserHelper {
     }
 
 
-        public static Query getAllUsers(){
-            return UserHelper.getUsersCollection();
-        }
+    public static Query getAllUsers() {
+        return UserHelper.getUsersCollection();
+    }
 
-        // UPDATE USER
-        public static Task<Void> updateUser(Boolean favorite, String uid) {
-            return UserHelper.getUsersCollection().document(uid).update("favorite", favorite);
-        }
-        // Update user with restaurant's informations
-    public static Task<Void> updateUserWithRestaurantInfo(String uid, String restaurantPlaceId, String restaurantName, String restaurantAddress){
-        return UserHelper.getUsersCollection().document(uid).update("restaurantName",restaurantName, "restaurantPlaceId", restaurantPlaceId, "restaurantAddress", restaurantAddress );
+    // UPDATE USER
+    public static void updateUser(final String favorite, final String uid) {
+        UserHelper.getUser(uid).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+
+                if (user.getFavoritesRestaurants().contains(favorite)) {
+                    user.getFavoritesRestaurants().remove(favorite);
+                } else {
+                    user.getFavoritesRestaurants().add(favorite);
+                }
+
+                UserHelper.getUsersCollection().document(uid).update("favoritesRestaurants", user.getFavoritesRestaurants());
+            }
+        });
+    }
+
+    // Update user with restaurant's informations
+    public static Task<Void> updateUserWithRestaurantInfo(String uid, String restaurantPlaceId, String restaurantName, String restaurantAddress) {
+        return UserHelper.getUsersCollection().document(uid).update("restaurantName", restaurantName, "restaurantPlaceId", restaurantPlaceId, "restaurantAddress", restaurantAddress);
     }
 }
 
