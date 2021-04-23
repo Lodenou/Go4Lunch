@@ -42,6 +42,12 @@ public static WorkMatesFragment newInstance() {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        transformQuerytoUser();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_work_mates_list, container, false);
@@ -49,8 +55,9 @@ public static WorkMatesFragment newInstance() {
         mRecyclerView = view.findViewById(R.id.recycler_view);
 
         this.mUsers = new ArrayList<>();
-        transformQuerytoUser();
         this.mAdapter = new MyItemRecyclerViewAdapter(mUsers);
+        transformQuerytoUser();
+
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         return view;
@@ -58,9 +65,13 @@ public static WorkMatesFragment newInstance() {
 
 
     private void transformQuerytoUser(){
+        mUsers.clear();
+        mAdapter.notifyDataSetChanged();
         UserHelper.getAllUsers().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                mUsers.clear();
+                mAdapter.notifyDataSetChanged();
                 List<DocumentSnapshot> listworkmates = queryDocumentSnapshots.getDocuments();
                 for (DocumentSnapshot item: listworkmates) {
                     User userw =  item.toObject(User.class);
