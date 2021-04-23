@@ -1,5 +1,6 @@
 package com.lodenou.go4lunch.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
