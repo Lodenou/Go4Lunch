@@ -78,6 +78,9 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
 
     };
 
+    //TODO COULEUR DES MARQUEURS : RECUPERER LA LISTE DES WORKMATES ET COMPARER LE PLACEID DU RESTO DANS LE RESULTAT AVEC "SI AU MOINS  1 PERSONNE MATCH" ALORS CHANGER L ICONE EN VERTE
+    //TODO L ICONE SE SET LA OU SONT DEFINIT LES MARQUEURS METTRE LE ADDMARQUEUR DANS LE ON SUCCESS DE LA REQUETE DE RECEPTION DES USERS
+
     @AfterPermissionGranted(RC_CAMERA_AND_LOCATION)
     private void methodRequiresTwoPermission(final GoogleMap googleMap) {
         mGoogleMap = googleMap;
