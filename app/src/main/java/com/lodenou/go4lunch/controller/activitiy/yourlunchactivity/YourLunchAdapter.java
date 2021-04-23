@@ -41,12 +41,12 @@ public class YourLunchAdapter extends RecyclerView.Adapter<YourLunchViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull YourLunchViewHolder holder, int position) {
-//        User user = mUsers.get(position);
+        User user = mUsers.get(position);
 
         TextView textView = holder.mContentView;
         // change text color to black to fit with the white bg
-//        textView.setTextColor(Color.argb(255, 0, 0, 0));
-//        textView.setText(user.getName());
+        textView.setTextColor(Color.argb(255, 0, 0, 0));
+        textView.setText(user.getName());
         TextView textView1 = holder.mIdView;
         textView1.setText(String.valueOf(position));
         // change text color to black to fit with the white bg
@@ -55,7 +55,6 @@ public class YourLunchAdapter extends RecyclerView.Adapter<YourLunchViewHolder> 
 
     @Override
     public int getItemCount() {
-//        return mUsers.size();
-        return 5;
+        return mUsers.size();
     }
 }

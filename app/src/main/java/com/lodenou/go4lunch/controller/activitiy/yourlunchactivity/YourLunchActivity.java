@@ -1,21 +1,14 @@
 package com.lodenou.go4lunch.controller.activitiy.yourlunchactivity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
-import com.facebook.login.LoginManager;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -35,21 +28,18 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.core.UserData;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.lodenou.go4lunch.BuildConfig;
 import com.lodenou.go4lunch.R;
-import com.lodenou.go4lunch.controller.activitiy.MainActivity;
 import com.lodenou.go4lunch.controller.api.ApiCall;
 import com.lodenou.go4lunch.controller.api.UserHelper;
 import com.lodenou.go4lunch.model.User;
 import com.lodenou.go4lunch.model.nearbysearch.Restaurant;
 import com.lodenou.go4lunch.model.nearbysearch.Result;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class YourLunchActivity extends AppCompatActivity implements ApiCall.Callbacks2 {
 
@@ -74,23 +64,32 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
         getCurrentUser();
 //        fabClick();
         setUpRecyclerView();
-        getCallBack();
+
         //FIXME ne marche pas
 //        setIcons();
     }
 
-    private void setFavoriteRestaurant() {
-        UserHelper.updateUser(true, FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+    //TODO "TRANSFORM QUERY TO USER" COMME DANS WORKMATE FRAGMENT
+    // PERMET D AFFICHER TOUTE LA LISTE DE WORKMATES ET ENSUITE PERMET  DE TRIER
+
+    private void setFavoriteRestaurant(String value) {
+        UserHelper.updateUser(value, FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
-    private void unsetFavoriteRestaurant() {
-        UserHelper.updateUser(false, FirebaseAuth.getInstance().getCurrentUser().getUid());
+    private void unsetFavoriteRestaurant(String value) {
+        UserHelper.updateUser(value, FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
     //TODO A AMELIORER
     private void recordUserRestaurant(){
         String value = getIntent().getStringExtra("key");
         UserHelper.updateUserWithRestaurantInfo(FirebaseAuth.getInstance().getCurrentUser().getUid(),value, mResult.getName(), mResult.getVicinity());
+    }
+
+    private void removeUserRestaurant(){
+
+        UserHelper.updateUserWithRestaurantInfo(FirebaseAuth.getInstance().getCurrentUser().getUid(),"", "", "");
     }
 
     private void getCurrentUser() {
@@ -102,6 +101,7 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             mUser = documentSnapshot.toObject(User.class);
+                            getCallBack();
                         }
                     });
         }
@@ -119,31 +119,6 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
         }
     }
 
-//    private void fabClick() {
-//        //TODO s'inspirer de setFavoriteRestaurant à faire dans le onResponse
-//        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                if (!mUser.haveFavoriteRestaurant()) {
-//                    mUser.setFavorite(true);
-//                    setFavoriteRestaurant();
-//                    Snackbar.make(view, "Ajouté aux favoris", Snackbar.LENGTH_LONG)
-//                            .setAction("Action", null).show();
-//                    fab.setImageResource(R.drawable.ic_baseline_check_circle_24);
-//                    fab.setColorFilter(Color.argb(250, 25, 255, 25));
-//                } else {
-//                    mUser.setFavorite(false);
-//                    unsetFavoriteRestaurant();
-//                    fab.setImageResource(R.drawable.ic_baseline_crop_din_24);
-//                    Snackbar.make(view, "Retiré des favoris", Snackbar.LENGTH_LONG)
-//                            .setAction("Action", null).show();
-//                }
-//            }
-//        });
-//    }
-
     private void setUpRecyclerView() {
         mRecyclerView = findViewById(R.id.my_recycler_view);
 
@@ -152,13 +127,54 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
         //Linear layout manager
         layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
+        this.mUsers = new ArrayList<>();
+        transformQuerytoUser();
         // Specify the adapter
         mAdapter = new YourLunchAdapter(mUsers);
         mRecyclerView.setAdapter(mAdapter);
+
+    }
+
+    private void transformQuerytoUser(){
+        UserHelper.getAllUsers().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                mUsers.clear();
+                mAdapter.notifyDataSetChanged();
+                List<DocumentSnapshot> listworkmates = queryDocumentSnapshots.getDocuments();
+                String value = getIntent().getStringExtra("key");
+                for (DocumentSnapshot item: listworkmates) {
+                    User userw =  item.toObject(User.class);
+                    if (userw.getRestaurantPlaceId().equals(value)) {
+                        mUsers.add(userw);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        });
     }
 
     public void getCallBack() {
+        final ImageView imageStar = findViewById(R.id.image_star);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         String value = getIntent().getStringExtra("key");
+
+        if (mUser.getFavoritesRestaurants() == null || !(mUser.getFavoritesRestaurants().contains(value))) {
+            imageStar.setVisibility(View.INVISIBLE);
+        } else {
+            imageStar.setVisibility(View.VISIBLE);
+        }
+
+
+        if (mUser.getRestaurantPlaceId() != null && mUser.getRestaurantPlaceId().equals(value)) {
+            fab.setImageResource(R.drawable.ic_baseline_check_circle_24);
+            fab.setColorFilter(Color.argb(250, 25, 255, 25));
+        }
+
+        else {
+            fab.setImageResource(R.drawable.ic_baseline_crop_din_24);
+        }
+
         ApiCall.fetchDetail(this, value);
     }
 
@@ -179,6 +195,7 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
         final ImageView imageStar = findViewById(R.id.image_star);
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         mResult = result;
+        final String value = getIntent().getStringExtra("key");
 
 
         restaurantName.setText(result.getName());
@@ -210,15 +227,17 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
             public void onClick(View v) {
 
 
-                if (mUser.getFavoritesRestaurants() == null) {
+                if (mUser.getFavoritesRestaurants() == null || !(mUser.getFavoritesRestaurants().contains(value))) {
 //                    mUser.setFavorite(true);
-                    setFavoriteRestaurant();
+                    setFavoriteRestaurant(value);
+                    mUser.getFavoritesRestaurants().add(value);
                     imageStar.setVisibility(View.VISIBLE);
                     Snackbar.make(v, "Ajouté aux favoris", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
 //                    mUser.setFavorite(false);
-                    unsetFavoriteRestaurant();
+                    unsetFavoriteRestaurant(value);
+                    mUser.getFavoritesRestaurants().remove(value);
                     imageStar.setVisibility(View.INVISIBLE);
                     Snackbar.make(v, "Retiré des favoris", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
@@ -229,10 +248,10 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                mUser.setRestaurant(false);
 
-                if (mUser.getRestaurantPlaceId() == null) {
 
+                if (mUser.getRestaurantPlaceId() == null || !(mUser.getRestaurantPlaceId().equals(value))) {
+                    mUser.setRestaurantPlaceId(value);
                     recordUserRestaurant();
                     Snackbar.make(view, "Vous allez manger au restaurant "+result.getName(), Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
@@ -241,11 +260,13 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
                 }
 
                 else {
-
+                    mUser.setRestaurantPlaceId("");
+                    removeUserRestaurant();
                     fab.setImageResource(R.drawable.ic_baseline_crop_din_24);
                     Snackbar.make(view, "Vous ne mangez plus au restaurant "+result.getName(), Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
+                transformQuerytoUser();
             }
         });
 
