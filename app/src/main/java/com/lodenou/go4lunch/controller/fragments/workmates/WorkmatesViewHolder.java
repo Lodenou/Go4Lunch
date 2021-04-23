@@ -20,7 +20,7 @@ public class WorkmatesViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         mIdView = (TextView) itemView.findViewById(R.id.item_number);;
         mContentView = (TextView) itemView.findViewById(R.id.content);
-        startYourLunchActivityOnClick();
+//        startYourLunchActivityOnClick();
     }
 
 

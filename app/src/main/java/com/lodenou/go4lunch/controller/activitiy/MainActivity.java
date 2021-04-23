@@ -46,6 +46,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -317,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                     }
                     else{
-                        UserHelper.createUser(uid, username, null, null,null, urlPicture,null).addOnFailureListener(new OnFailureListener() {
+                        UserHelper.createUser(uid, username, null, null,null, urlPicture, new ArrayList<String>()).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(getApplicationContext(), "Firestore Error", Toast.LENGTH_LONG).show();
@@ -328,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    UserHelper.createUser(uid, username, null, null,null, urlPicture,null).addOnFailureListener(new OnFailureListener() {
+                    UserHelper.createUser(uid, username, null, null,null, urlPicture, new ArrayList<String>()).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(getApplicationContext(), "Firestore Error", Toast.LENGTH_LONG).show();

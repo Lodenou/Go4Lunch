@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lodenou.go4lunch.R;
+import com.lodenou.go4lunch.controller.activitiy.yourlunchactivity.YourLunchActivity;
 import com.lodenou.go4lunch.model.User;
 
 import java.util.List;
@@ -39,19 +41,41 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<WorkmatesVie
 
     @Override
     public void onBindViewHolder(@NonNull WorkmatesViewHolder holder, int position) {
+
+
         // Get the data model based on position
-        User user = mUsers.get(position);
+        String displayedText = "";
+        final User user = mUsers.get(position);
 
-
+        displayedText+=user.getName();
         // Set item views based on your views and data model
+
+        if (user.getRestaurantPlaceId() != null && !(user.getRestaurantPlaceId().isEmpty())) {
+            displayedText+=" is eating at "+user.getRestaurantName();
+
+        }
+        else {
+            displayedText+=" hasn't decided yet ";
+        }
+
         TextView textView = holder.mContentView;
-        textView.setText(user.getName());
-
-
+        textView.setText(displayedText);
         TextView textView1 = holder.mIdView;
         textView1.setText(String.valueOf(position));
 
-    }
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (user.getRestaurantPlaceId() != null && !(user.getRestaurantPlaceId().isEmpty())) {
+                        Context context = view.getContext();
+                        Intent intent = new Intent(context, YourLunchActivity.class);
+                        intent.putExtra("key", user.getRestaurantPlaceId());
+                        context.startActivity(intent);
+                    }
+                }
+            });
+        }
+
 
     @Override
     public int getItemCount() {
