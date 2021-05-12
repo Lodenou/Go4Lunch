@@ -32,9 +32,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.api.ApiCall;
 import com.lodenou.go4lunch.controller.api.ApiClient;
+import com.lodenou.go4lunch.controller.api.UserHelper;
+import com.lodenou.go4lunch.model.User;
 import com.lodenou.go4lunch.model.nearbysearch.Restaurant;
 import com.lodenou.go4lunch.model.nearbysearch.Result;
 
@@ -50,6 +54,7 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
     private static final int RC_CAMERA_AND_LOCATION = 1;
     MapsFragment fragmentMap;
     GoogleMap mGoogleMap;
+    List<Result> mResults;
 
 
     public static MapsFragment newInstance() {
@@ -71,6 +76,7 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
          */
         @Override
         public void onMapReady(final GoogleMap googleMap) {
+            mGoogleMap = googleMap;
             methodRequiresTwoPermission(googleMap);
 
 
@@ -151,31 +157,73 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
 
 
     @Override
-    public void onResponse(@Nullable List<Result> results) {
+    public void onResponse(@Nullable final List<Result> results) {
         Log.d("error5555", "on response");
+        mResults = results;
         //TODO
         if (results != null) {
             int i = 0;
             while(i < results.size()) {
 
-                double currentLat = results.get(i).getGeometry().getLocation().getLat();
-                double currentLng = results.get(i).getGeometry().getLocation().getLng();
-
+                final double currentLat = results.get(i).getGeometry().getLocation().getLat();
+                final double currentLng = results.get(i).getGeometry().getLocation().getLng();
 
                 // resize the marker
-                int height = 100;
-                int width = 70;
-                BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_orange);
-                Bitmap b = bitmapdraw.getBitmap();
-                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                final int height = 100;
+                final int width = 70;
 
-                // add orange markers
-                mGoogleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(currentLat, currentLng))
-                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+                final int finalI = i;
+
+                UserHelper.getAllUsers().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        Boolean choose = false;
+                        List<DocumentSnapshot> listworkmates = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot item : listworkmates) {
+                            User userw = item.toObject(User.class);
+                            if (userw.getRestaurantPlaceId().equals(results.get(finalI).getPlaceId())) {
+                                choose = true;
+                                break;
+                            }
+                        }
+                        if (choose.equals(true)) {
+                            BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_white);
+                            Bitmap b = bitmapdraw.getBitmap();
+                            Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+                            // add orange markers
+                            mGoogleMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(currentLat, currentLng))
+                                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+
+                        }
+                        else {
+                            BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_orange);
+                            Bitmap b = bitmapdraw.getBitmap();
+                            Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+                            // add orange markers
+                            mGoogleMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(currentLat, currentLng))
+                                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+                        }
+                    }
+                });
+
+
+
                 i++;
                 //TODO ADD GREEN MARKERS
             }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mGoogleMap != null) {
+            onResponse(mResults);
         }
     }
 
