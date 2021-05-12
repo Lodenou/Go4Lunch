@@ -1,13 +1,18 @@
 package com.lodenou.go4lunch.controller.fragments.listview;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +20,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.lodenou.go4lunch.BuildConfig;
@@ -62,8 +70,8 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewVi
         TextView restaurantName = holder.mContentView;
         TextView restaurantAddress = holder.mRestaurantAddress;
         TextView openingHours = holder.mOpeningHours;
-        TextView distance = holder.mDistance;
-        TextView workmatesNumber = holder.mWorkmatesNumber;
+        final TextView distance = holder.mDistance;
+        final TextView workmatesNumber = holder.mWorkmatesNumber;
         TextView ratingStars = holder.mRatingStars;
         ImageView restaurantImage = holder.mRestaurantImage;
 
@@ -74,31 +82,56 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewVi
 
         if (restaurant.getOpeningHours() != null) {
             if (restaurant.getOpeningHours().getOpenNow()) {
-            openingHours.setText("Open");
-        }
-        else {
-            openingHours.setText("Closed");
+                openingHours.setText("Open");
+            } else {
+                openingHours.setText("Closed");
             }
-        }
-        else {
+        } else {
             openingHours.setText("Pas d'horaire spécifié");
         }
         //TODO distance à calculer
-        distance.setText(restaurant.getScope());
+        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                final Double currentLat = location.getLatitude();
+                final Double currentLng = location.getLongitude();
+                String positionResto = restaurant.getGeometry().getLocation().getLat().toString()+","+restaurant.getGeometry().getLocation().getLng().toString();
+                String position = currentLat.toString() + "," + currentLng.toString();
+
+                Location locationResto = new Location(LocationManager.GPS_PROVIDER);
+                locationResto.setLatitude(restaurant.getGeometry().getLocation().getLat());
+                locationResto.setLongitude(restaurant.getGeometry().getLocation().getLng());
+                Float distance1 = location.distanceTo(locationResto);
+                int i = distance1.intValue();
+                distance.setText(i+" m");
+            }
+        });
+
         //TODO workmatesnumber
         UserHelper.getAllUsers().get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                int i = 0;
                 List<DocumentSnapshot> listworkmates = queryDocumentSnapshots.getDocuments();
-                for (DocumentSnapshot item: listworkmates) {
-                    User userw =  item.toObject(User.class);
+                for (DocumentSnapshot item : listworkmates) {
+                    User userw = item.toObject(User.class);
+                    if (userw.getRestaurantPlaceId().equals(restaurant.getPlaceId())) {
+                        i = i + 1;
+                    }
+
 //                    mUsers.add(userw);
 //                    mAdapter.notifyDataSetChanged();
                 }
+                workmatesNumber.setText(String.valueOf(i));
             }
         });
 
-        workmatesNumber.setText(restaurant.getUserRatingsTotal().toString());
+
         ratingStars.setText(restaurant.getRating().toString());
 
 
@@ -119,6 +152,11 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewVi
                 context.startActivity(intent);
             }
         });
+
+    }
+
+    private void executeHttpRequestWithRetrofit() {
+
 
     }
 
