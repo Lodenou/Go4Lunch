@@ -228,14 +228,12 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
 
 
                 if (mUser.getFavoritesRestaurants() == null || !(mUser.getFavoritesRestaurants().contains(value))) {
-//                    mUser.setFavorite(true);
                     setFavoriteRestaurant(value);
                     mUser.getFavoritesRestaurants().add(value);
                     imageStar.setVisibility(View.VISIBLE);
                     Snackbar.make(v, "Ajouté aux favoris", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
-//                    mUser.setFavorite(false);
                     unsetFavoriteRestaurant(value);
                     mUser.getFavoritesRestaurants().remove(value);
                     imageStar.setVisibility(View.INVISIBLE);
