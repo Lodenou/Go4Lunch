@@ -1,7 +1,6 @@
-package com.lodenou.go4lunch.controller.activitiy;
+package com.lodenou.go4lunch.controller.activity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,7 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.PageAdapter;
-import com.lodenou.go4lunch.controller.activitiy.yourlunchactivity.YourLunchActivity;
+import com.lodenou.go4lunch.controller.activity.yourlunchactivity.YourLunchActivity;
 import com.lodenou.go4lunch.controller.api.UserHelper;
 import com.lodenou.go4lunch.model.User;
 
@@ -46,8 +45,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
     User mUser;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         setTabIcons();
         setNavMenuOnClicks();
         getFbInfo();
+
+        //TODO peut etre créer un if pour les users normaux et ceux de GOOGLE FB ETC
         createUserInFirestore();
     }
 
@@ -112,11 +110,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 switch (position) {
-                    case 0: toolbar.setTitle("I'm hungry !");
-                    break;
-                    case 1: toolbar.setTitle("I'm hungry !");
-                    break;
-                    case 2: toolbar.setTitle("Available workmates");
+                    case 0:
+                        toolbar.setTitle("I'm hungry !");
+                        break;
+                    case 1:
+                        toolbar.setTitle("I'm hungry !");
+                        break;
+                    case 2:
+                        toolbar.setTitle("Available workmates");
                         break;
                 }
             }
@@ -225,12 +226,11 @@ public class MainActivity extends AppCompatActivity {
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 mUser = documentSnapshot.toObject(User.class);
 
-                                if(mUser.getRestaurantPlaceId() != null) {
+                                if (mUser.getRestaurantPlaceId() != null && mUser.getRestaurantPlaceId() != "") {
                                     Intent intent = new Intent(MainActivity.this, YourLunchActivity.class);
                                     intent.putExtra("key", mUser.getRestaurantPlaceId());
                                     startActivity(intent);
-                                }
-                                else{
+                                } else {
                                     new AlertDialog.Builder(MainActivity.this)
                                             .setTitle("Oops")
                                             .setMessage("You didn't chose a restaurant !")
@@ -287,18 +287,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Nullable
-    protected FirebaseUser getCurrentUser(){
+    protected FirebaseUser getCurrentUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    protected Boolean isCurrentUserLogged(){
+    protected Boolean isCurrentUserLogged() {
         return (this.getCurrentUser() != null);
     }
 
 
     // 1 - Http request that create user in firestore
-    private void createUserInFirestore(){
-        if (this.getCurrentUser() != null){
+    private void createUserInFirestore() {
+
+        String username2 = getIntent().getExtras().getString("username", "");
+        String email = getIntent().getExtras().getString("email", "");
+        String password = getIntent().getExtras().getString("password", "");
+        if (this.getCurrentUser() != null) {
 
             final String urlPicture = (this.getCurrentUser().getPhotoUrl() != null) ? this.getCurrentUser().getPhotoUrl().toString() : null;
             final String username = this.getCurrentUser().getDisplayName();
@@ -310,16 +314,17 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     mUser = documentSnapshot.toObject(User.class);
-                    if (mUser != null){
-                    UserHelper.createUser(uid, username, mUser.getRestaurantName(), mUser.getRestaurantPlaceId(), mUser.getRestaurantAddress(), urlPicture,mUser.getFavoritesRestaurants()).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "Firestore Error", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    }
-                    else{
-                        UserHelper.createUser(uid, username, null, null,null, urlPicture, new ArrayList<String>()).addOnFailureListener(new OnFailureListener() {
+                    if (mUser != null) {
+                        UserHelper.createUser(uid, username, mUser.getRestaurantName(), mUser.getRestaurantPlaceId(),
+                                mUser.getRestaurantAddress(), urlPicture, mUser.getFavoritesRestaurants()).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Firestore Error", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        UserHelper.createUser(uid, username, null, null, null, urlPicture,
+                                null).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(getApplicationContext(), "Firestore Error", Toast.LENGTH_LONG).show();
@@ -330,7 +335,8 @@ public class MainActivity extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    UserHelper.createUser(uid, username, null, null,null, urlPicture, new ArrayList<String>()).addOnFailureListener(new OnFailureListener() {
+                    UserHelper.createUser(uid, username, null, null, null, urlPicture,
+                            null).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(getApplicationContext(), "Firestore Error", Toast.LENGTH_LONG).show();
