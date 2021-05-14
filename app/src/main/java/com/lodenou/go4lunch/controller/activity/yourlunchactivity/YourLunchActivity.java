@@ -1,4 +1,4 @@
-package com.lodenou.go4lunch.controller.activitiy.yourlunchactivity;
+package com.lodenou.go4lunch.controller.activity.yourlunchactivity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -145,7 +145,7 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
                 String value = getIntent().getStringExtra("key");
                 for (DocumentSnapshot item: listworkmates) {
                     User userw =  item.toObject(User.class);
-                    if (userw.getRestaurantPlaceId().equals(value)) {
+                    if (userw.getRestaurantPlaceId() != null && userw.getRestaurantPlaceId().equals(value)) {
                         mUsers.add(userw);
                         mAdapter.notifyDataSetChanged();
                     }
