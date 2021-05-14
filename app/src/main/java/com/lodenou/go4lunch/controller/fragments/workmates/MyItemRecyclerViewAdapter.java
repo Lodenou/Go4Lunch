@@ -61,14 +61,26 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<WorkmatesVie
         } else {
             userRestaurant.setText(" hasn't decided yet");
         }
+
+
         ImageView userAvatar = holder.mAvatarUser;
         String avatarUrl = user.getAvatarUrl();
-        Context context = userAvatar.getContext();
-        Glide.with(context)
-                .load(avatarUrl)
-                .sizeMultiplier(0.08f)
-                .circleCrop()
-                .into(userAvatar);
+        if (avatarUrl != null) {
+            Context context = userAvatar.getContext();
+            Glide.with(context)
+                    .load(avatarUrl)
+                    .sizeMultiplier(0.08f)
+                    .circleCrop()
+                    .into(userAvatar);
+        }
+        else {
+            Context context = userAvatar.getContext();
+            Glide.with(context)
+                    .load("https://fnadepape.org/wp-content/uploads/2018/07/avatar-1577909_960_720.png")
+                    .sizeMultiplier(0.08f)
+                    .circleCrop()
+                    .into(userAvatar);
+        }
     }
 
     @Override

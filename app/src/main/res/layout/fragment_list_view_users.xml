@@ -9,6 +9,7 @@
         android:id="@+id/user_avatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_block_24"
         android:layout_marginTop="6dp"
         android:layout_marginStart="15dp"
         >
@@ -19,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="21dp"
+        android:text="No username"
         android:layout_marginStart="16dp"
         android:textAppearance="?attr/textAppearanceListItem" />
 
