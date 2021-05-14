@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lodenou.go4lunch.R;
@@ -19,6 +20,7 @@ import java.util.List;
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<WorkmatesViewHolder> {
 
     private List<User> mUsers;
+
 
     public MyItemRecyclerViewAdapter(List<User> users) {
         this.mUsers = users;
@@ -53,29 +55,21 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<WorkmatesVie
         if (user.getRestaurantPlaceId() != null && !(user.getRestaurantPlaceId().isEmpty())) {
             displayedText+=" is eating at "+user.getRestaurantName();
 
+        TextView userRestaurant = holder.mUserRestaurant;
+        if (user.getRestaurantName() != null && !user.getRestaurantName().equals("")) {
+            userRestaurant.setText(" is eating at " + user.getRestaurantName());
+        } else {
+            userRestaurant.setText(" hasn't decided yet");
         }
-        else {
-            displayedText+=" hasn't decided yet ";
-        }
-
-        TextView textView = holder.mContentView;
-        textView.setText(displayedText);
-        TextView textView1 = holder.mIdView;
-        textView1.setText(String.valueOf(position));
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (user.getRestaurantPlaceId() != null && !(user.getRestaurantPlaceId().isEmpty())) {
-                        Context context = view.getContext();
-                        Intent intent = new Intent(context, YourLunchActivity.class);
-                        intent.putExtra("key", user.getRestaurantPlaceId());
-                        context.startActivity(intent);
-                    }
-                }
-            });
-        }
-
+        ImageView userAvatar = holder.mAvatarUser;
+        String avatarUrl = user.getAvatarUrl();
+        Context context = userAvatar.getContext();
+        Glide.with(context)
+                .load(avatarUrl)
+                .sizeMultiplier(0.08f)
+                .circleCrop()
+                .into(userAvatar);
+    }
 
     @Override
     public int getItemCount() {
