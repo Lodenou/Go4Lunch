@@ -47,7 +47,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-auth:21.0.0'
+    implementation platform('com.google.firebase:firebase-bom:27.1.0')
+    implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-analytics:19.0.0'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation 'com.firebaseui:firebase-ui-firestore:3.1.3'
@@ -57,7 +58,6 @@ dependencies {
     //Facebook login
     implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
     // Twitter login
-    implementation platform('com.google.firebase:firebase-bom:27.1.0')
     implementation 'com.twitter.sdk.android:twitter:3.1.1'
     implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
     implementation 'com.twitter.sdk.android:tweet-ui:3.1.1'

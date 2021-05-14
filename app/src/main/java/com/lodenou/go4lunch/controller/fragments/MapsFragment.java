@@ -182,7 +182,8 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
                         List<DocumentSnapshot> listworkmates = queryDocumentSnapshots.getDocuments();
                         for (DocumentSnapshot item : listworkmates) {
                             User userw = item.toObject(User.class);
-                            if (userw.getRestaurantPlaceId().equals(results.get(finalI).getPlaceId())) {
+
+                            if (userw.getRestaurantPlaceId() != null && userw.getRestaurantPlaceId().equals(results.get(finalI).getPlaceId())) {
                                 choose = true;
                                 break;
                             }

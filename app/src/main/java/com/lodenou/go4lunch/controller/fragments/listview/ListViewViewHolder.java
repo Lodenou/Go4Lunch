@@ -1,7 +1,5 @@
 package com.lodenou.go4lunch.controller.fragments.listview;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lodenou.go4lunch.R;
-import com.lodenou.go4lunch.controller.activitiy.yourlunchactivity.YourLunchActivity;
 
 public class ListViewViewHolder extends RecyclerView.ViewHolder {
 

@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -25,6 +27,9 @@ public class WorkMatesFragment extends Fragment {
     MyItemRecyclerViewAdapter mAdapter;
     private List<User> mUsers;
     RecyclerView mRecyclerView;
+    ImageView userAvatar;
+    User mUser;
+
 
     public WorkMatesFragment() {
     }
@@ -38,13 +43,25 @@ public static WorkMatesFragment newInstance() {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         transformQuerytoUser();
+    }
+
+    public void initiateLayout(){
+
+
+        String avatarUrl = mUser.getAvatarUrl();
+
+        Glide.with(this)
+                .load(avatarUrl)
+                .sizeMultiplier(0.1f)
+                .circleCrop()
+                .into(userAvatar);
+//        username.setText(personName);
     }
 
     @Override

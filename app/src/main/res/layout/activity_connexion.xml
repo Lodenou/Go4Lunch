@@ -7,7 +7,7 @@
     android:background="@drawable/lunchbg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.activitiy.ConnexionActivity">
+    tools:context=".controller.activity.ConnexionActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -115,7 +115,6 @@
                 android:paddingStart="15dp"
                 android:text="Sign in with Google"
                 android:textAllCaps="false"
-
                 android:textStyle="bold">
 
             </Button>
@@ -160,6 +159,23 @@
                 android:clickable="true"
                 android:onClick="onClick"
                 android:paddingLeft="8dp" />
+
+            <Button
+                android:id="@+id/twitter_btn"
+                android:layout_width="292dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="onClick"
+                android:paddingStart="15dp"
+                >
+
+            </Button>
+
+
+
         </FrameLayout>
 
     </LinearLayout>

@@ -9,8 +9,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.view.LayoutInflater;
@@ -28,14 +26,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.lodenou.go4lunch.BuildConfig;
 import com.lodenou.go4lunch.R;
-import com.lodenou.go4lunch.controller.activitiy.yourlunchactivity.YourLunchActivity;
+import com.lodenou.go4lunch.controller.activity.yourlunchactivity.YourLunchActivity;
 import com.lodenou.go4lunch.controller.api.UserHelper;
 import com.lodenou.go4lunch.model.User;
 import com.lodenou.go4lunch.model.nearbysearch.Result;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewViewHolder> {
@@ -120,7 +115,7 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewVi
                 List<DocumentSnapshot> listworkmates = queryDocumentSnapshots.getDocuments();
                 for (DocumentSnapshot item : listworkmates) {
                     User userw = item.toObject(User.class);
-                    if (userw.getRestaurantPlaceId().equals(restaurant.getPlaceId())) {
+                    if (userw.getRestaurantPlaceId() != null && userw.getRestaurantPlaceId().equals(restaurant.getPlaceId())) {
                         i = i + 1;
                     }
 
