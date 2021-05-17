@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="70dp"
             android:scaleX="1.6"
             android:scaleY="1.4"
             android:src="@drawable/bowl_logo" />
@@ -51,7 +51,7 @@
             android:id="@+id/FrameLayout1"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginTop="60dp">
+            android:layout_marginTop="100dp">
 
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/login_button"
@@ -121,62 +121,6 @@
 
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="0dp">
-
-            <Button
-                android:id="@+id/email_login_button"
-                android:layout_width="292dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/rounded_button_google"
-                android:drawableStart="@drawable/ic_baseline_email_24"
-                android:focusable="true"
-                android:fontFamily="@font/roboto"
-                android:onClick="onClick"
-                android:clickable="true"
-                android:text="Log in with email"
-                android:textStyle="bold"
-                android:textAllCaps="false"
-                android:paddingStart="15dp">
-
-            </Button>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="0dp">
-
-            <com.twitter.sdk.android.core.identity.TwitterLoginButton
-                android:id="@+id/twitter_button"
-                android:layout_width="292dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:clickable="true"
-                android:onClick="onClick"
-                android:paddingLeft="8dp" />
-
-            <Button
-                android:id="@+id/twitter_btn"
-                android:layout_width="292dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="visible"
-                android:clickable="true"
-                android:focusable="true"
-                android:onClick="onClick"
-                android:paddingStart="15dp"
-                >
-
-            </Button>
-
-
-
-        </FrameLayout>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

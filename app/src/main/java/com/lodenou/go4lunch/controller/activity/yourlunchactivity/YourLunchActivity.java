@@ -62,11 +62,7 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
 //        CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 //        toolBarLayout.setBackgroundColor(Color.parseColor("#800000"));
         getCurrentUser();
-//        fabClick();
         setUpRecyclerView();
-
-        //FIXME ne marche pas
-//        setIcons();
     }
 
 
@@ -107,17 +103,6 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
         }
     }
 
-//    public void
-    //FIXME ne marche pas
-    private void setIcons(){
-        ImageView imageStar = findViewById(R.id.image_star);
-        if (mUser.getFavoritesRestaurants() != null){
-            imageStar.setVisibility(View.INVISIBLE);
-        }
-        else {
-            imageStar.setVisibility(View.VISIBLE);
-        }
-    }
 
     private void setUpRecyclerView() {
         mRecyclerView = findViewById(R.id.my_recycler_view);

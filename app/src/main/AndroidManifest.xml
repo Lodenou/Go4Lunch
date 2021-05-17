@@ -18,7 +18,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.activity.EmailPasswordActivity"></activity>
         <activity
             android:name=".controller.activity.yourlunchactivity.YourLunchActivity"
             android:label="@string/title_activity_your_lunch"

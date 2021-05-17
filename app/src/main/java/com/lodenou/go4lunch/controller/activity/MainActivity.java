@@ -45,6 +45,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,9 +71,6 @@ public class MainActivity extends AppCompatActivity {
         setTabIcons();
         setNavMenuOnClicks();
         getFbInfo();
-
-        //TODO peut etre créer un if pour les users normaux et ceux de GOOGLE FB ETC
-        //TODO OU SET LE USERNAME ETC AVANT DE TENTER DE LE CREER VIA FIRESTORE
         createUserInFirestore();
     }
 
@@ -299,11 +298,6 @@ public class MainActivity extends AppCompatActivity {
 
     // 1 - Http request that create user in firestore
     private void createUserInFirestore() {
-//FIXME NE MARCHE PAS
-//        String username2 = getIntent().getExtras().getString("username", "");
-//        String email = getIntent().getExtras().getString("email", "");
-//        String password = getIntent().getExtras().getString("password", "");
-
 
         if (this.getCurrentUser() != null) {
 

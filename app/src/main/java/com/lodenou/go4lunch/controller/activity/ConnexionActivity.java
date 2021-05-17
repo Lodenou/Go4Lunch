@@ -59,7 +59,6 @@ public class ConnexionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_connexion);
         // INITIATE FIREBASE AUTH
         mAuth = FirebaseAuth.getInstance();
-        setUpTwitterBtn();
         signInGoogle();
         signInFacebook();
         //FIXME SE LANCE EN BOUCLE
@@ -112,10 +111,6 @@ public class ConnexionActivity extends AppCompatActivity {
         });
     }
 
-    public void setUpTwitterBtn(){
-        Button twitterBtn = findViewById(R.id.twitter_btn);
-        twitterBtn.setBackgroundColor(Color.TRANSPARENT);
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -218,80 +213,9 @@ public class ConnexionActivity extends AppCompatActivity {
                 });
     }
 
-    public void signInTwitter() {
-
-        //create oauth instance
-        OAuthProvider.Builder provider = OAuthProvider.newBuilder("twitter.com");
-
-        Task<AuthResult> pendingResultTask = mAuth.getPendingAuthResult();
-        if (pendingResultTask != null) {
-            // There's something already here! Finish the sign-in for your user.
-            pendingResultTask
-                    .addOnSuccessListener(
-                            new OnSuccessListener<AuthResult>() {
-                                @Override
-                                public void onSuccess(AuthResult authResult) {
-                                    // User is signed in.
-                                    // IdP data available in
-                                    // authResult.getAdditionalUserInfo().getProfile().
-                                    // The OAuth access token can also be retrieved:
-                                    // authResult.getCredential().getAccessToken().
-                                    // The OAuth secret can be retrieved by calling:
-                                    // authResult.getCredential().getSecret().
-                                }
-                            })
-                    .addOnFailureListener(
-                            new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    // Handle failure.
-                                }
-                            });
-        } else {
-            // There's no pending result so you need to start the sign-in flow.
-            // See below.
-        }
-        mAuth
-                .startActivityForSignInWithProvider(/* activity= */ this, provider.build())
-                .addOnSuccessListener(
-                        new OnSuccessListener<AuthResult>() {
-                            @Override
-                            public void onSuccess(AuthResult authResult) {
-
-
-                                // Log out from google
-                                GoogleSignInOptions gso = new GoogleSignInOptions.
-                                        Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
-                                        build();
-
-                                GoogleSignInClient googleSignInClient = GoogleSignIn
-                                        .getClient(ConnexionActivity.this, gso);
-                                googleSignInClient.signOut();
-                                //Log out from facebook
-                                LoginManager.getInstance().logOut();
-                                finish();
-
-                                startActivity(new Intent(ConnexionActivity.this, MainActivity.class));
-                                Toast.makeText(ConnexionActivity.this,
-                                        "You successfully signed-in ", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                .addOnFailureListener(
-                        new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // Handle failure.
-                            }
-                        });
-
-    }
-
     public void onClick(View v) {
         Button google = findViewById(R.id.google_button);
         Button fb = (Button) findViewById(R.id.fb);
-//        Button twitter = findViewById(R.id.twitter_button);
-        Button twitterBtn = findViewById(R.id.twitter_btn);
-        Button email = findViewById(R.id.email_login_button);
         GoogleSignInButton googleSignInButton = findViewById(R.id.btn_sign_in);
         LoginButton loginButton = findViewById(R.id.login_button);
 
@@ -300,14 +224,6 @@ public class ConnexionActivity extends AppCompatActivity {
         }
         if (v == google) {
             googleSignInButton.performClick();
-        }
-        if (v == twitterBtn) {
-            signInTwitter();
-        }
-        if (v == email) {
-            Context context = v.getContext();
-            Intent intent = new Intent(context, EmailPasswordActivity.class);
-            context.startActivity(intent);
         }
     }
 
