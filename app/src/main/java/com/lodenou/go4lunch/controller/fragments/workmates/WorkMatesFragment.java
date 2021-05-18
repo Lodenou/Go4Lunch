@@ -51,19 +51,6 @@ public static WorkMatesFragment newInstance() {
         transformQuerytoUser();
     }
 
-    public void initiateLayout(){
-
-
-        String avatarUrl = mUser.getAvatarUrl();
-
-        Glide.with(this)
-                .load(avatarUrl)
-                .sizeMultiplier(0.1f)
-                .circleCrop()
-                .into(userAvatar);
-//        username.setText(personName);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
