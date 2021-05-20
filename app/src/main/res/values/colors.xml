@@ -3,6 +3,11 @@
     <color name="colorPrimary">#ff582a</color>
     <color name="colorPrimaryDark">#c41e00</color>
     <color name="colorAccent">#ff8b57</color>
+    <color name="colorError">#FF5252</color>
+
+    <color name="colorGreen">#6BB18C</color>
+    <color name="colorSandLight">#ECDAAF</color>
+    <color name="colorSand">#EBCB94</color>
 
     <!-- Array of colors that will be used by ViewPager as background colors -->
     <array name="colorPagesViewPager">
