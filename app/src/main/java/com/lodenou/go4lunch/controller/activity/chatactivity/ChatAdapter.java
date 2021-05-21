@@ -1,6 +1,6 @@
 package com.lodenou.go4lunch.controller.activity.chatactivity;
 
-import android.os.Message;
+
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -11,8 +11,9 @@ import com.bumptech.glide.RequestManager;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.lodenou.go4lunch.R;
+import com.lodenou.go4lunch.model.Message;
 
-public class ChatAdapter extends FirestoreRecyclerAdapter<Message, MessageViewHolder> {
+public class ChatAdapter extends FirestoreRecyclerAdapter<Message, ChatViewHolder> {
 
 
     public interface Listener {
@@ -34,13 +35,13 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, MessageViewHo
         }
 
         @Override
-        protected void onBindViewHolder(@NonNull MessageViewHolder holder, int position, @NonNull Message model) {
+        protected void onBindViewHolder(@NonNull ChatViewHolder holder, int position, @NonNull Message model) {
             holder.updateWithMessage(model, this.idCurrentUser, this.glide);
         }
 
         @Override
-        public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MessageViewHolder(LayoutInflater.from(parent.getContext())
+        public ChatViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new ChatViewHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.activity_chat_item, parent, false));
         }
 

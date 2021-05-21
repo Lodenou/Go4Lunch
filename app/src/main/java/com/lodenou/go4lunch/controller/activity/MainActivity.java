@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.PageAdapter;
+import com.lodenou.go4lunch.controller.activity.chatactivity.ChatActivity;
 import com.lodenou.go4lunch.controller.activity.yourlunchactivity.YourLunchActivity;
 import com.lodenou.go4lunch.controller.api.UserHelper;
 import com.lodenou.go4lunch.model.User;
@@ -246,6 +247,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_logout:
                         logOut4();
                         return true;
+                    case R.id.chat:
+                        Intent i = new Intent(MainActivity.this, ChatActivity.class);
+                        startActivity(i);
                     default:
                         return false;
                 }
