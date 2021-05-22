@@ -17,7 +17,9 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, ChatViewHolde
 
 
     public interface Listener {
-            void onDataChanged();
+        int getFragmentLayout();
+
+        void onDataChanged();
         }
 
         //FOR DATA
