@@ -1,12 +1,5 @@
 package com.lodenou.go4lunch.controller.activity.chatactivity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,8 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,11 +31,8 @@ import com.lodenou.go4lunch.controller.api.UserHelper;
 import com.lodenou.go4lunch.model.Message;
 import com.lodenou.go4lunch.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ChatActivity extends AppCompatActivity implements ChatAdapter.Listener {
@@ -81,6 +76,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
 //            this.configureToolbar();
         this.getCurrentUserFromFirestore();
         this.configureRecyclerView();
+        onBackClick();
     }
 
     @Override
@@ -162,13 +158,23 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
         startActivity(i);
     }
 
-    private void clickOnButton() {
-        ImageButton imageButton = findViewById(R.id.activity_mentor_chat_add_file_button);
+//    private void clickOnButton() {
+//        ImageButton imageButton = findViewById(R.id.activity_mentor_chat_add_file_button);
+//        imageButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+//                startActivity(i);
+//            }
+//        });
+//    }
+
+    private void onBackClick(){
+        ImageButton imageButton = findViewById(R.id.activity_chat_back_button);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
+                onBackPressed();
             }
         });
     }
@@ -232,7 +238,11 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
                 .build();
     }
 
-    // --------------------
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+// --------------------
     // CALLBACK
     // --------------------
 
@@ -242,3 +252,4 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
         textViewRecyclerViewEmpty.setVisibility(this.mChatAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 }
+
