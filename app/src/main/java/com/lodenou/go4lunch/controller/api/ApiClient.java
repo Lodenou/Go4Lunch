@@ -1,6 +1,7 @@
 package com.lodenou.go4lunch.controller.api;
 
 import com.lodenou.go4lunch.BuildConfig;
+import com.lodenou.go4lunch.model.autocomplete.Autocomplete;
 import com.lodenou.go4lunch.model.detail.GoogleDetailResult;
 import com.lodenou.go4lunch.model.nearbysearch.GoogleSearchResults;
 
@@ -24,4 +25,8 @@ public interface ApiClient {
 
     @GET("details/json?fields=name,vicinity,international_phone_number,website,photo&key=" + BuildConfig.GOOGLE_MAP_API_KEY)
     Call<GoogleDetailResult> getPlaceDetails(@Query("place_id") String placeId);
+
+    @GET("autocomplete/json?types=establishment&radius=5000&strictbounds&key=" + BuildConfig.GOOGLE_MAP_API_KEY)
+    Call<Autocomplete> getAutocomplete(@Query("input") String input, @Query("location") String location, @Query("radius") int radius);
+
 }
