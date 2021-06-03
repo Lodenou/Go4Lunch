@@ -2,10 +2,13 @@ package com.lodenou.go4lunch.controller.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,20 +16,17 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.GoogleApi;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -36,10 +36,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.api.ApiCall;
-import com.lodenou.go4lunch.controller.api.ApiClient;
 import com.lodenou.go4lunch.controller.api.UserHelper;
 import com.lodenou.go4lunch.model.User;
-import com.lodenou.go4lunch.model.nearbysearch.Restaurant;
 import com.lodenou.go4lunch.model.nearbysearch.Result;
 
 import java.util.List;
@@ -52,14 +50,23 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
 
 
     private static final int RC_CAMERA_AND_LOCATION = 1;
-    MapsFragment fragmentMap;
     GoogleMap mGoogleMap;
     List<Result> mResults;
+    private SearchView searchView = null;
+    private SearchView.OnQueryTextListener queryTextListener;
+
+
 
 
     public static MapsFragment newInstance() {
         MapsFragment fragmentMap = new MapsFragment();
         return fragmentMap;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -78,14 +85,9 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
         public void onMapReady(final GoogleMap googleMap) {
             mGoogleMap = googleMap;
             methodRequiresTwoPermission(googleMap);
-
-
         }
 
     };
-
-    //TODO COULEUR DES MARQUEURS : RECUPERER LA LISTE DES WORKMATES ET COMPARER LE PLACEID DU RESTO DANS LE RESULTAT AVEC "SI AU MOINS  1 PERSONNE MATCH" ALORS CHANGER L ICONE EN VERTE
-    //TODO L ICONE SE SET LA OU SONT DEFINIT LES MARQUEURS METTRE LE ADDMARQUEUR DANS LE ON SUCCESS DE LA REQUETE DE RECEPTION DES USERS
 
     @AfterPermissionGranted(RC_CAMERA_AND_LOCATION)
     private void methodRequiresTwoPermission(final GoogleMap googleMap) {
@@ -122,6 +124,52 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
             });
         }
     }
+
+    // searchview //////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_search_view, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        }
+        queryTextListener = new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.i("onQueryTextChange", newText);
+
+                return true;
+            }
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.i("onQueryTextSubmit", query);
+
+                return true;
+            }
+        };
+        searchView.setOnQueryTextListener(queryTextListener);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                // Not implemented here
+                return false;
+            default:
+                break;
+        }
+        searchView.setOnQueryTextListener(queryTextListener);
+        return super.onOptionsItemSelected(item);
+    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
     @Override

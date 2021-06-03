@@ -1,17 +1,25 @@
 package com.lodenou.go4lunch.controller.fragments.listview;
 
 import android.Manifest;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -37,6 +45,8 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks {
     ListViewRecyclerViewAdapter mAdapter;
     private List<Result> mRestaurants;
     String location1 = "";
+    private SearchView searchView = null;
+    private SearchView.OnQueryTextListener queryTextListener;
 
 
     public ListViewFragment() {
@@ -52,6 +62,7 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
     }
 
@@ -64,6 +75,51 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks {
 
         return view;
     }
+
+    // searchview //////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_search_view, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        }
+        queryTextListener = new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.i("onQueryTextChange", newText);
+
+                return true;
+            }
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.i("onQueryTextSubmit", query);
+
+                return true;
+            }
+        };
+        searchView.setOnQueryTextListener(queryTextListener);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                // Not implemented here
+                return false;
+            default:
+                break;
+        }
+        searchView.setOnQueryTextListener(queryTextListener);
+        return super.onOptionsItemSelected(item);
+    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void onResume() {
