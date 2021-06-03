@@ -69,19 +69,30 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<WorkmatesVie
             Context context = userAvatar.getContext();
             Glide.with(context)
                     .load(avatarUrl)
-                    .sizeMultiplier(0.08f)
+
                     .circleCrop()
                     .into(userAvatar);
-        }
-        else {
+        } else {
             Context context = userAvatar.getContext();
             Glide.with(context)
                     .load("https://fnadepape.org/wp-content/uploads/2018/07/avatar-1577909_960_720.png")
-                    .sizeMultiplier(0.08f)
+
                     .circleCrop()
                     .into(userAvatar);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (user.getRestaurantPlaceId() != null && !user.getRestaurantPlaceId().isEmpty()) {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, YourLunchActivity.class);
+                    intent.putExtra("key", user.getRestaurantPlaceId());
+                    context.startActivity(intent);
+                }
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {

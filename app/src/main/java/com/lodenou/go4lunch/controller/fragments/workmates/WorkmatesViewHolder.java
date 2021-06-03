@@ -32,31 +32,4 @@ public class WorkmatesViewHolder extends RecyclerView.ViewHolder {
 //        startYourLunchActivityOnClick();
     }
 
-
-//    private void startYourLunchActivityOnClick(){
-//        itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Context context = v.getContext();
-//                Intent intent = new Intent(context, YourLunchActivity.class);
-//                context.startActivity(intent);
-//            }
-//        });
-//    }
-
-    private void startYourLunchOnClick() {
-
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                User mUser = new User();
-
-                //TODO REUSSIR A ENVOYER LE RESTAURANTPLACEID
-                Context context = view.getContext();
-                Intent intent = new Intent(context, YourLunchActivity.class);
-                intent.putExtra("key", mUser.getRestaurantPlaceId());
-                context.startActivity(intent);
-            }
-        });
-    }
 }
