@@ -62,7 +62,7 @@ public class YourLunchAdapter extends RecyclerView.Adapter<YourLunchViewHolder> 
             Context context = userAvatar.getContext();
             Glide.with(context)
                     .load(avatarUrl)
-                    .sizeMultiplier(0.08f)
+
                     .circleCrop()
                     .into(userAvatar);
         }
@@ -70,7 +70,7 @@ public class YourLunchAdapter extends RecyclerView.Adapter<YourLunchViewHolder> 
             Context context = userAvatar.getContext();
             Glide.with(context)
                     .load("https://fnadepape.org/wp-content/uploads/2018/07/avatar-1577909_960_720.png")
-                    .sizeMultiplier(0.08f)
+//                    .sizeMultiplier(0.08f)
                     .circleCrop()
                     .into(userAvatar);
         }
