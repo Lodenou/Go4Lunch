@@ -1,9 +1,85 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:id="@+id/RelativeLayout01"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#696969">
 
-    <FrameLayout
-        android:id="@+id/settings"
+<!--    <FrameLayout-->
+<!--        android:id="@+id/settings"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent" />-->
+
+    <ImageButton
+        android:id="@+id/back_arrow_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:clickable="true"
+        android:backgroundTint="#696969"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        android:focusable="true">
+
+    </ImageButton>
+    <TextView
+        android:id="@+id/message_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+        android:text="Messages">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/message_text_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/message_title"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="13dp"
+        android:text="Delete all your messages? "
+        >
+    </TextView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/message_text_question"
+        android:layout_below="@+id/message_title"
+        android:layout_marginStart="30dp"
+        android:backgroundTint="#5e5e5e"
+        android:text="Yes"
+        android:textStyle="bold"
+        >
+    </Button>
+
+    <TextView
+        android:id="@+id/language_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/message_text_question"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+        android:text="Language">
+
+    </TextView>
+
+
+    <Spinner
+        android:id="@+id/spinner_language"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/language_title"
+        android:popupBackground="#000000"
+        android:spinnerMode="dropdown"
+        android:layout_marginTop="13dp"
+        />
+</RelativeLayout>
+
