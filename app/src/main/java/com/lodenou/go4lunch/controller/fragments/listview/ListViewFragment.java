@@ -170,7 +170,7 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks, Api
 
     @Override
     public void onResponse(com.lodenou.go4lunch.model.detail.Result result) {
-        mAdapter.
+//        mAdapter.
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
