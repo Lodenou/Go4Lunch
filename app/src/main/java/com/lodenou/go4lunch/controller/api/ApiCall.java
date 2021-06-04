@@ -2,6 +2,8 @@ package com.lodenou.go4lunch.controller.api;
 
 import androidx.annotation.Nullable;
 
+import com.lodenou.go4lunch.model.autocomplete.Autocomplete;
+import com.lodenou.go4lunch.model.autocomplete.Prediction;
 import com.lodenou.go4lunch.model.detail.GoogleDetailResult;
 import com.lodenou.go4lunch.model.nearbysearch.GoogleSearchResults;
 import com.lodenou.go4lunch.model.nearbysearch.Restaurant;
@@ -78,4 +80,37 @@ public class ApiCall{
             }
         });
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public interface Callbacks3 {
+        void onResponse2(@Nullable List<Prediction> predictions);
+        void onFailure2();
+    }
+
+    // 2 - Public method to start fetching users following by Jake Wharton
+    public static void autocompleteSearch(Callbacks3 callbacks, String location, int radius, String input){
+
+        // 2.1 - Create a weak reference to callback (avoid memory leaks)
+        final WeakReference<Callbacks3> callbacksWeakReference = new WeakReference<Callbacks3>(callbacks);
+
+        // 2.2 - Get a Retrofit instance and the related endpoints
+        ApiClient apiClient = ApiClient.retrofit.create(ApiClient.class);
+
+        // 2.3 - Create the call on Github API
+        Call<Autocomplete> call = apiClient.getAutocomplete(input,location, radius);
+        // 2.4 - Start the call
+        call.enqueue(new Callback<Autocomplete>() {
+
+            @Override
+            public void onResponse(Call<Autocomplete> call, Response<Autocomplete> response) {
+                if (callbacksWeakReference.get() != null) callbacksWeakReference.get().onResponse2(response.body().getPredictions());
+            }
+
+            @Override
+            public void onFailure(Call<Autocomplete> call, Throwable t) {
+                if (callbacksWeakReference.get() != null) callbacksWeakReference.get().onFailure2();
+            }
+        });
+    }
+
 }

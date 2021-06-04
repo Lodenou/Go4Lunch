@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.api.ApiCall;
+import com.lodenou.go4lunch.model.autocomplete.Prediction;
 import com.lodenou.go4lunch.model.nearbysearch.Result;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  */
-public class ListViewFragment extends Fragment implements ApiCall.Callbacks {
+public class ListViewFragment extends Fragment implements ApiCall.Callbacks, ApiCall.Callbacks3, ApiCall.Callbacks2 {
 
 
     RecyclerView mRecyclerView;
@@ -94,7 +95,10 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks {
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.i("onQueryTextChange", newText);
+                if (newText.length() >= 3) {
+                    executeHttpRequestWithRetrofit2(newText);
 
+                }
                 return true;
             }
             @Override
@@ -119,7 +123,59 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks {
         searchView.setOnQueryTextListener(queryTextListener);
         return super.onOptionsItemSelected(item);
     }
+
+
+    @Override
+    public void onResponse2(@Nullable List<Prediction> predictions) {
+        if (predictions != null) {
+            for (Prediction p : predictions)
+            {
+                getCallbackFetchDetail(p.getPlaceId());
+            }
+            Log.d("TAG", "onResponse2: ");
+        }
+    }
+
+    @Override
+    public void onFailure2() {
+
+    }
+
+    private void executeHttpRequestWithRetrofit2(String input) {
+        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                final Double currentLat = location.getLatitude();
+                final Double currentLng = location.getLongitude();
+                location1 = currentLat.toString() + "," + currentLng.toString();
+                getCallbackAutocomplete(input);
+            }
+        });
+    }
+    private void getCallbackAutocomplete(String input){
+        ApiCall.autocompleteSearch(this, location1, 5000, input);
+    }
+
+
+
+    private void getCallbackFetchDetail(String placeId){
+        ApiCall.fetchDetail(this, placeId);
+    }
+
+    @Override
+    public void onResponse(com.lodenou.go4lunch.model.detail.Result result) {
+        mAdapter.
+    }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
     @Override
     public void onResume() {
