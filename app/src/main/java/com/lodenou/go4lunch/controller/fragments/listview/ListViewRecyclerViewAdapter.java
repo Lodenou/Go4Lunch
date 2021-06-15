@@ -150,10 +150,6 @@ public class ListViewRecyclerViewAdapter extends RecyclerView.Adapter<ListViewVi
 
     }
 
-    private void executeHttpRequestWithRetrofit() {
-
-
-    }
 
 
     @Override
