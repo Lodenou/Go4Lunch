@@ -1,9 +1,9 @@
 package com.lodenou.go4lunch.model.detail;
 
-
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 
 public class Photo {
 
