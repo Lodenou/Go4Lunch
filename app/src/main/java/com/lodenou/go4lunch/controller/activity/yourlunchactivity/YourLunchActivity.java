@@ -57,17 +57,10 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_your_lunch);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        toolbar.setBackgroundColor(Color.parseColor("#544554"));
-//        setSupportActionBar(toolbar);
-//        CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-//        toolBarLayout.setBackgroundColor(Color.parseColor("#800000"));
         getCurrentUser();
         setUpRecyclerView();
     }
 
-
-    //TODO "TRANSFORM QUERY TO USER" COMME DANS WORKMATE FRAGMENT
-    // PERMET D AFFICHER TOUTE LA LISTE DE WORKMATES ET ENSUITE PERMET  DE TRIER
 
     private void setFavoriteRestaurant(String value) {
         UserHelper.updateUser(value, FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -270,6 +263,7 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
 
             case 123:
@@ -284,4 +278,13 @@ public class YourLunchActivity extends AppCompatActivity implements ApiCall.Call
                 break;
         }
     }
+    ////////////////NOTIFICATION////////////////////////////////////////////////////////////////////
+    private void gg(){
+        if(mUser.getRestaurantPlaceId() != null) {
+
+        }
+
+    }
+
+
 }
