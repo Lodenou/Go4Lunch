@@ -21,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,15 +39,17 @@ import com.lodenou.go4lunch.R;
 import com.lodenou.go4lunch.controller.api.ApiCall;
 import com.lodenou.go4lunch.controller.api.UserHelper;
 import com.lodenou.go4lunch.model.User;
+import com.lodenou.go4lunch.model.autocomplete.Prediction;
 import com.lodenou.go4lunch.model.nearbysearch.Result;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class MapsFragment extends Fragment implements ApiCall.Callbacks {
+public class MapsFragment extends Fragment implements ApiCall.Callbacks, ApiCall.Callbacks2, ApiCall.Callbacks3 {
 
 
     private static final int RC_CAMERA_AND_LOCATION = 1;
@@ -54,8 +57,8 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
     List<Result> mResults;
     private SearchView searchView = null;
     private SearchView.OnQueryTextListener queryTextListener;
-
-
+    String location1 = "";
+    private List<com.lodenou.go4lunch.model.detail.Result> mResultList = new ArrayList<>();
 
 
     public static MapsFragment newInstance() {
@@ -143,9 +146,33 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.i("onQueryTextChange", newText);
+                if (newText.length() == 0) {
 
+                    FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                        return true;
+                    }
+                    Task<Location> task = fusedLocationProviderClient.getLastLocation();
+                    task.addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            final Double currentLat = location.getLatitude();
+                            final Double currentLng = location.getLongitude();
+                            location1 = currentLat.toString() + "," + currentLng.toString();
+                            executeHttpRequestWithRetrofit(currentLat, currentLng);
+                        }
+                    });
+                }
+
+
+                if (newText.length() >= 3) {
+                    executeHttpRequestWithRetrofit2(newText);
+
+                }
                 return true;
             }
+
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.i("onQueryTextSubmit", query);
@@ -168,8 +195,80 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
         searchView.setOnQueryTextListener(queryTextListener);
         return super.onOptionsItemSelected(item);
     }
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    private void executeHttpRequestWithRetrofit2(String input) {
+        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                final Double currentLat = location.getLatitude();
+                final Double currentLng = location.getLongitude();
+                location1 = currentLat.toString() + "," + currentLng.toString();
+                getCallbackAutocomplete(input);
+            }
+        });
+    }
+
+    private void getCallbackAutocomplete(String input) {
+        ApiCall.autocompleteSearch(this, location1, 5000, input);
+    }
+
+    private void getCallbackFetchDetail(String placeId) {
+        ApiCall.fetchDetail(this, placeId);
+    }
+
+
+    @Override
+    public void onFailure() {
+        Log.d("error", "on failure");
+    }
+
+    @Override
+    public void onResponse(com.lodenou.go4lunch.model.detail.Result result) {
+        final double currentLat = result.getGeometry().getLocation().getLat();
+        final double currentLng = result.getGeometry().getLocation().getLng();
+
+        // resize the marker
+        final int height = 100;
+        final int width = 70;
+        mResultList.add(result);
+        BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.ic_marker_orange);
+        Bitmap b = bitmapdraw.getBitmap();
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+        // add orange markers
+        mGoogleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(currentLat, currentLng))
+                .icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
+    }
+
+
+    @Override
+    public void onResponse2(List<Prediction> predictions) {
+        if (predictions != null) {
+            mResultList.clear();
+            mGoogleMap.clear();
+            for (Prediction p : predictions) {
+                for (String s : p.getTypes()) {
+                    if (s.equals("restaurant")) {
+                        getCallbackFetchDetail(p.getPlaceId());
+                    }
+                }
+            }
+            Log.d("TAG", "onResponse2: ");
+        }
+    }
+
+    @Override
+    public void onFailure2() {
+
+    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     @Override
@@ -210,8 +309,9 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
         mResults = results;
         //TODO
         if (results != null) {
+            mGoogleMap.clear();
             int i = 0;
-            while(i < results.size()) {
+            while (i < results.size()) {
 
                 final double currentLat = results.get(i).getGeometry().getLocation().getLat();
                 final double currentLng = results.get(i).getGeometry().getLocation().getLng();
@@ -237,7 +337,7 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
                             }
                         }
                         if (choose.equals(true)) {
-                            BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_white);
+                            BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.ic_marker_white);
                             Bitmap b = bitmapdraw.getBitmap();
                             Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
@@ -246,9 +346,8 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
                                     .position(new LatLng(currentLat, currentLng))
                                     .icon(BitmapDescriptorFactory.fromBitmap(smallMarker)));
 
-                        }
-                        else {
-                            BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_orange);
+                        } else {
+                            BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(R.drawable.ic_marker_orange);
                             Bitmap b = bitmapdraw.getBitmap();
                             Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
@@ -259,11 +358,7 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
                         }
                     }
                 });
-
-
-
                 i++;
-                //TODO ADD GREEN MARKERS
             }
         }
     }
@@ -276,16 +371,12 @@ public class MapsFragment extends Fragment implements ApiCall.Callbacks {
         }
     }
 
-    @Override
-    public void onFailure() {
-        Log.d("error", "on failure");
-    }
-
 
     // 3 - Update UI showing only name of users
-    private void updateUIWithResult(List<Result> results){
-            
-        }
+    private void updateUIWithResult(List<Result> results) {
+
     }
+
+}
 
 
