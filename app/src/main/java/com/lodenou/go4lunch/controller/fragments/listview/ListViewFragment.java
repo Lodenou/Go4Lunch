@@ -44,10 +44,12 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks, Api
 
     RecyclerView mRecyclerView;
     ListViewRecyclerViewAdapter mAdapter;
+    SearchListAdapter mSearchListAdapter;
     private List<Result> mRestaurants;
     String location1 = "";
     private SearchView searchView = null;
     private SearchView.OnQueryTextListener queryTextListener;
+    private List<com.lodenou.go4lunch.model.detail.Result> mResultList = new ArrayList<>();
 
 
     public ListViewFragment() {
@@ -95,6 +97,10 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks, Api
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.i("onQueryTextChange", newText);
+                if (newText.length() == 0){
+                    executeHttpRequestWithRetrofit();
+                    mRecyclerView.setAdapter(mAdapter);
+                }
                 if (newText.length() >= 3) {
                     executeHttpRequestWithRetrofit2(newText);
 
@@ -128,9 +134,13 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks, Api
     @Override
     public void onResponse2(@Nullable List<Prediction> predictions) {
         if (predictions != null) {
-            for (Prediction p : predictions)
-            {
-                getCallbackFetchDetail(p.getPlaceId());
+            mResultList.clear();
+            for (Prediction p : predictions) {
+                for (String s : p.getTypes()) {
+                    if (s.equals("restaurant")) {
+                    getCallbackFetchDetail(p.getPlaceId());
+                }
+                }
             }
             Log.d("TAG", "onResponse2: ");
         }
@@ -170,7 +180,9 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks, Api
 
     @Override
     public void onResponse(com.lodenou.go4lunch.model.detail.Result result) {
-//        mAdapter.
+//            if (mResultList == mRestaurants)
+            mResultList.add(result);
+            setSearchListAdapter();
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,6 +203,14 @@ public class ListViewFragment extends Fragment implements ApiCall.Callbacks, Api
         this.mAdapter = new ListViewRecyclerViewAdapter(mRestaurants);
         mRecyclerView.setAdapter(this.mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+    }
+
+    private void setSearchListAdapter(){
+
+        this.mSearchListAdapter = new SearchListAdapter(mResultList);
+        mRecyclerView.setAdapter(this.mSearchListAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+
     }
 
     // 4 - Execute HTTP request and update UI
